@@ -55,7 +55,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                 }),
           ),
           body: Padding(
-            padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+            padding: EdgeInsets.only(top: 10.0, left: 20.0, right: 20.0),
             child: ListView(
               children: <Widget>[
                 Padding(
@@ -92,6 +92,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                 ),
                 Container(
                     padding: EdgeInsets.only(top: 15.0),
+                    height: 80.0,
                     child: FormField<String>(
                         builder: (FormFieldState<String> state) {
                           return InputDecorator(
