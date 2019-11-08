@@ -6,7 +6,7 @@ import 'package:rsc_hex_code_library/screens/hex_code_detail.dart';
 import 'package:sqflite/sqflite.dart';
 
 class HexCodeList extends StatefulWidget {
-
+  
   @override
   State<StatefulWidget> createState() {
     return HexCodeState();
@@ -14,14 +14,12 @@ class HexCodeList extends StatefulWidget {
 }
 
 class HexCodeState extends State<HexCodeList> {
-
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<HexCode> hexCodeList;
   int count = 0;
 
   @override
   Widget build(BuildContext context) {
-
     if (hexCodeList == null) {
       hexCodeList = List<HexCode>();
       updateListView();
@@ -49,62 +47,55 @@ class HexCodeState extends State<HexCodeList> {
     return ListView.builder(
       itemCount: count,
       itemBuilder: (BuildContext context, int position) {
-        return Card(
-          color: Colors.white,
-          elevation: 2.0,
-          child: ListTile(
-            leading: Container(
-              width: 42.0,
-              height: 42.0,
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black,
-                      spreadRadius: 1.0, // has the effect of extending the shadow
-                      offset: Offset(
-                        7.5, // horizontal, move right 10
-                        7.5, // vertical, move down 10
+        return Center(
+            child: Card(
+                color: Colors.white, elevation: 2.0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ListTile(
+                    leading: Container(
+                      width: 42.0,
+                      height: 42.0,
+                      decoration: BoxDecoration(
+                          color: Color(
+                              convertHexCode(this.hexCodeList[position].hexCode))),
+                    ),
+                    title: Text(
+                      this.hexCodeList[position].colorName,
+                    ),
+                    subtitle: decideSubtitle(context, position),
+                  ),
+                    ButtonTheme.bar(
+                      child: ButtonBar(
+                        children: <Widget>[
+                          FlatButton(
+                            child: const Text('EDIT'),
+                            onPressed: () {
+                              navigateToDetailView(this.hexCodeList[position], 'Edit Hex Code');
+                            },
+                          ),
+                          FlatButton(
+                            child: const Text('DELETE'),
+                            onPressed: () {
+                              _delete(context, hexCodeList[position]);
+                            },
+                          )
+                        ],
                       ),
                     )
-                  ],
-                  border: Border.all(color: Colors.black),
-                  color: Color(convertHexCode(this.hexCodeList[position].hexCode))
-              ),
-            ),
-            title: Text(
-              this.hexCodeList[position].colorName,
-              style: titleStyle,
-            ),
-            subtitle: Text(this.hexCodeList[position].hexCode),
-            trailing: GestureDetector(
-              child: Icon(
-                Icons.delete,
-                color: Colors.grey,
-              ),
-              onTap: () {
-                _delete(context, hexCodeList[position]);
-              },
-            ),
-            onTap: () {
-              debugPrint('ListTile Tapped');
-              navigateToDetailView(this.hexCodeList[position], 'Edit Hex Code');
+                  ]),
+              ));
             },
-          ),
-        );
-      },
     );
   }
 
-  Color getPriorityColor(int priority) {
-    switch (priority) {
-      case 1:
-        return Colors.red;
-        break;
-      case 2:
-        return Colors.yellow;
-        break;
-      default:
-        return Colors.yellow;
+  Widget decideSubtitle(BuildContext context, int position) {
+    if (this.hexCodeList[position].pearlescent != null) {
+      return Text(this.hexCodeList[position].hexCode + ' w/ ' + this.hexCodeList[position].pearlescent + ' pearlescent');
+    }
+    else {
+      return Text(this.hexCodeList[position].hexCode);
     }
   }
 
@@ -140,7 +131,6 @@ class HexCodeState extends State<HexCodeList> {
   }
 
   void updateListView() {
-
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database) {
       Future<List<HexCode>> hexCodeListFuture = databaseHelper.getHexCodeList();

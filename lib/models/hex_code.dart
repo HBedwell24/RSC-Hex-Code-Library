@@ -2,25 +2,31 @@ class HexCode {
   int _id;
   String _colorName;
   String _hexCode;
+  String _pearlescent;
 
-  HexCode(this._colorName, [this._hexCode]);
+  HexCode(this._colorName, this._pearlescent, [this._hexCode]);
 
-  HexCode.withId(this._id, this._colorName, [this._hexCode]);
+  HexCode.withId(this._id, this._colorName, this._pearlescent, [this._hexCode]);
 
   int get id => _id;
   String get colorName => _colorName;
   String get hexCode => _hexCode;
+  String get pearlescent => _pearlescent;
 
-  set colorName(String newTitle) {
-    if (newTitle.length <= 255) {
-      this._colorName = newTitle;
+  set colorName(String newColorName) {
+    if (newColorName.length <= 255) {
+      this._colorName = newColorName;
     }
   }
 
-  set hexCode(String newDescription) {
-    if (newDescription.length <= 255) {
-      this._hexCode = newDescription;
+  set hexCode(String newHexCode) {
+    if (newHexCode.length <= 255) {
+      this._hexCode = newHexCode;
     }
+  }
+
+  set pearlescent(String newPearlescent) {
+    this._pearlescent = newPearlescent;
   }
 
   Map<String, dynamic> convertToMap() {
@@ -30,6 +36,7 @@ class HexCode {
     }
     map['colorName'] = _colorName;
     map['hexCode'] = _hexCode;
+    map['pearlescent'] = _pearlescent;
     return map;
   }
 
@@ -37,5 +44,6 @@ class HexCode {
     this._id = map['id'];
     this._colorName = map['colorName'];
     this._hexCode = map['hexCode'];
+    this._pearlescent = map['pearlescent'];
   }
 }

@@ -12,6 +12,7 @@ class DatabaseHelper {
   String colId = 'id';
   String colColorName = 'colorName';
   String colHexCode = 'hexCode';
+  String colPearlescent = 'pearlescent';
 
   DatabaseHelper._createInstance();
 
@@ -31,15 +32,14 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'hexCode.db';
+    String path = directory.path + 'hexCode3.db';
 
     var notesDatabase = await openDatabase(path, version: 1, onCreate: _createDb);
     return notesDatabase;
   }
 
   void _createDb(Database db, int newVersion) async {
-    await db.execute('CREATE TABLE $hexCodeTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colColorName TEXT, '
-      '$colHexCode TEXT)');
+    await db.execute('CREATE TABLE $hexCodeTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colColorName TEXT, $colHexCode TEXT, $colPearlescent TEXT)');
   }
 
   // Fetch operation

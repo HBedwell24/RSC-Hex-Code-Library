@@ -16,7 +16,7 @@ class HexCodeDetail extends StatefulWidget {
 }
 
 class HexCodeDetailState extends State<HexCodeDetail> {
-  static var _pearlescents = ['Black', 'Carbon Black', 'Graphite', 'Anthracite Black',
+  static var _pearlescents = ['No Selection', 'Black', 'Carbon Black', 'Graphite', 'Anthracite Black',
     'Black Steel', 'Dark Steel', 'Silver', 'Bluish Silver', 'Rolled Steel', 'Shadow Silver',
     'Stoner Silver', 'Midnight Silver', 'Cast Iron Silver', 'Red', 'Torino Red', 'Formula Red',
     'Lava Red', 'Blaze Red', 'Grace Red', 'Garnet Red', 'Sunset Red', 'Cabernet Red'];
@@ -26,8 +26,8 @@ class HexCodeDetailState extends State<HexCodeDetail> {
   String appBarTitle;
   HexCode hexCode;
 
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
+  TextEditingController colorNameController = TextEditingController();
+  TextEditingController hexCodeController = TextEditingController();
 
   HexCodeDetailState(this.hexCode, this.appBarTitle);
 
@@ -35,8 +35,8 @@ class HexCodeDetailState extends State<HexCodeDetail> {
   Widget build(BuildContext context) {
     TextStyle textStyle = Theme.of(context).textTheme.title;
 
-    titleController.text = hexCode.colorName;
-    descriptionController.text = hexCode.hexCode;
+    colorNameController.text = hexCode.colorName;
+    hexCodeController.text = hexCode.hexCode;
 
     return WillPopScope(
         onWillPop: () {
@@ -58,11 +58,11 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                 Padding(
                     padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
                     child: TextField(
-                      controller: titleController,
+                      controller: colorNameController,
                       style: textStyle,
                       onChanged: (value) {
-                        debugPrint('Something changed in Title Text Field');
-                        updateTitle();
+                        debugPrint('Something changed in Color Name Text Field');
+                        updateColorName();
                       },
                       decoration: InputDecoration(
                           labelText: 'Color',
@@ -73,12 +73,12 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                 Padding(
                     padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
                     child: TextField(
-                      controller: descriptionController,
+                      controller: hexCodeController,
                       style: textStyle,
                       onChanged: (value) {
                         debugPrint(
-                            'Something changed in Description Text Field');
-                        updateDescription();
+                            'Something changed in Hex Code Text Field');
+                        updateHexCode();
                       },
                       decoration: InputDecoration(
                           labelText: 'Hex Code',
@@ -95,9 +95,10 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                         );
                       }).toList(),
                       style: textStyle,
-                      value: null,
+                      value: _pearlescents[0],
                       onChanged: (valueSelectedByUser) {
                         setState(() {
+                          updatePearlescent(valueSelectedByUser);
                           debugPrint('User selected $valueSelectedByUser');
                         });
                       }),
@@ -154,12 +155,16 @@ class HexCodeDetailState extends State<HexCodeDetail> {
     Navigator.pop(context, true);
   }
 
-  void updateTitle() {
-    hexCode.colorName = titleController.text;
+  void updateColorName() {
+    hexCode.colorName = colorNameController.text;
   }
 
-  void updateDescription() {
-    hexCode.hexCode = descriptionController.text;
+  void updateHexCode() {
+    hexCode.hexCode = hexCodeController.text;
+  }
+
+  void updatePearlescent(String pearlescent) {
+    hexCode.pearlescent = pearlescent;
   }
 
   void _save() async {
