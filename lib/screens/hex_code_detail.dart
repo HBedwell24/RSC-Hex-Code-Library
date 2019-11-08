@@ -16,7 +16,7 @@ class HexCodeDetail extends StatefulWidget {
 }
 
 class HexCodeDetailState extends State<HexCodeDetail> {
-  static var _pearlescents = ['No Selection', 'Black', 'Carbon Black', 'Graphite', 'Anthracite Black',
+  static var _pearlescents = ['Black', 'Carbon Black', 'Graphite', 'Anthracite Black',
     'Black Steel', 'Dark Steel', 'Silver', 'Bluish Silver', 'Rolled Steel', 'Shadow Silver',
     'Stoner Silver', 'Midnight Silver', 'Cast Iron Silver', 'Red', 'Torino Red', 'Formula Red',
     'Lava Red', 'Blaze Red', 'Grace Red', 'Garnet Red', 'Sunset Red', 'Cabernet Red'];
@@ -30,6 +30,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
   TextEditingController hexCodeController = TextEditingController();
 
   HexCodeDetailState(this.hexCode, this.appBarTitle);
+  var currentSelectedValue;
 
   @override
   Widget build(BuildContext context) {
@@ -85,70 +86,96 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                           labelStyle: textStyle,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
-                    )),
-                ListTile(
-                  title: DropdownButton(
-                      items: _pearlescents.map((String dropDownStringItem) {
-                        return DropdownMenuItem<String>(
-                          value: dropDownStringItem,
-                          child: Text(dropDownStringItem),
-                        );
-                      }).toList(),
-                      style: textStyle,
-                      value: _pearlescents[0],
-                      onChanged: (valueSelectedByUser) {
-                        setState(() {
-                          updatePearlescent(valueSelectedByUser);
-                          debugPrint('User selected $valueSelectedByUser');
-                        });
-                      }),
+                    )
+                ),
+                Container(
+                    padding: EdgeInsets.only(top: 15.0),
+                    child: FormField<String>(
+                        builder: (FormFieldState<String> state) {
+                          return InputDecorator(
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0))),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                  hint: Text('Pearlescent'),
+                                  style: textStyle,
+                                  value: currentSelectedValue,
+                                  onChanged: (valueSelectedByUser) {
+                                    setState(() {
+                                      updatePearlescent(valueSelectedByUser);
+                                      currentSelectedValue = valueSelectedByUser;
+                                      debugPrint(
+                                          'User selected $valueSelectedByUser');
+                                    });
+                                  },
+                                  items: _pearlescents.map((String dropDownStringItem) {
+                                    return DropdownMenuItem<String>(
+                                      value: dropDownStringItem,
+                                      child: Text(dropDownStringItem),
+                                    );
+                                  }).toList(),
+                              ),
+                            ),
+                          );
+                        },
+                    ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: RaisedButton(
-                          color: Theme.of(context).primaryColorDark,
-                          textColor: Theme.of(context).primaryColorLight,
-                          child: Text(
-                            'Save',
-                            textScaleFactor: 1.5,
+                    padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: RaisedButton(
+                            color: Theme
+                                .of(context)
+                                .primaryColorDark,
+                            textColor: Theme
+                                .of(context)
+                                .primaryColorLight,
+                            child: Text(
+                              'Save',
+                              textScaleFactor: 1.5,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                debugPrint('Save button clicked');
+                                _save();
+                              });
+                            },
                           ),
-                          onPressed: () {
-                            setState(() {
-                              debugPrint('Save button clicked');
-                              _save();
-                            });
-                          },
                         ),
-                      ),
-                      Container(
-                        width: 5.0,
-                      ),
-                      Expanded(
-                        child: RaisedButton(
-                          color: Theme.of(context).primaryColorDark,
-                          textColor: Theme.of(context).primaryColorLight,
-                          child: Text(
-                            'Delete',
-                            textScaleFactor: 1.5,
+                        Container(
+                          width: 5.0,
+                        ),
+                        Expanded(
+                          child: RaisedButton(
+                            color: Theme
+                                .of(context)
+                                .primaryColorDark,
+                            textColor: Theme
+                                .of(context)
+                                .primaryColorLight,
+                            child: Text(
+                              'Delete',
+                              textScaleFactor: 1.5,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                debugPrint('Delete button clicked');
+                                _delete();
+                              });
+                            },
                           ),
-                          onPressed: () {
-                            setState(() {
-                              debugPrint('Delete button clicked');
-                              _delete();
-                            });
-                          },
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
-                )
-              ],
+                ]
+              ),
             ),
           ),
-        ));
+        );
   }
 
   void moveToLastScreen() {
@@ -174,13 +201,15 @@ class HexCodeDetailState extends State<HexCodeDetail> {
 
     if (hexCode.id != null) {
       result = await helper.updateHexCode(hexCode);
-    } else {
+    }
+    else {
       result = await helper.insertHexCode(hexCode);
     }
 
     if (result != 0) {
       _showAlertDialog('Status', 'Hex Code Saved Successfully!');
-    } else {
+    }
+    else {
       _showAlertDialog('Status', 'Something went wrong! Please try again!');
     }
   }
@@ -196,7 +225,8 @@ class HexCodeDetailState extends State<HexCodeDetail> {
     int result = await helper.deleteHexCode(hexCode.id);
     if (result != 0) {
       _showAlertDialog('Status', 'Hex Code Was Deleted Successfully!');
-    } else {
+    }
+    else {
       _showAlertDialog('Status', 'Deletion Unsuccessful!');
     }
   }
