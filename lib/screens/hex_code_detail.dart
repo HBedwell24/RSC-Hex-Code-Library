@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rsc_hex_code_library/models/hex_code.dart';
 import 'package:rsc_hex_code_library/utils/database_helper.dart';
-import 'package:intl/intl.dart';
 
 class HexCodeDetail extends StatefulWidget {
   final String appBarTitle;
@@ -38,6 +37,9 @@ class HexCodeDetailState extends State<HexCodeDetail> {
 
     colorNameController.text = hexCode.colorName;
     hexCodeController.text = hexCode.hexCode;
+    if (hexCode.pearlescent.isNotEmpty) {
+      currentSelectedValue = hexCode.pearlescent;
+    }
 
     return WillPopScope(
         onWillPop: () {
@@ -178,6 +180,36 @@ class HexCodeDetailState extends State<HexCodeDetail> {
         );
   }
 
+  void _showDialog(BuildContext context) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Are you sure you want to delete the following item?"),
+          content: new Text("This action cannot be undone."),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("NO"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("YES"),
+              onPressed: () {
+                _delete();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void moveToLastScreen() {
     Navigator.pop(context, true);
   }
@@ -191,7 +223,9 @@ class HexCodeDetailState extends State<HexCodeDetail> {
   }
 
   void updatePearlescent(String pearlescent) {
-    hexCode.pearlescent = pearlescent;
+    if (pearlescent != 'No Selection') {
+      hexCode.pearlescent = pearlescent;
+    }
   }
 
   void _save() async {

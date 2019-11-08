@@ -14,19 +14,21 @@ class HexCode {
   String get pearlescent => _pearlescent;
 
   set colorName(String newColorName) {
-    if (newColorName.length <= 255) {
+    if (newColorName.length <= 255 && newColorName.isNotEmpty) {
       this._colorName = newColorName;
     }
   }
 
   set hexCode(String newHexCode) {
-    if (newHexCode.length <= 255) {
+    if (newHexCode.length <= 255 && newHexCode.isNotEmpty) {
       this._hexCode = newHexCode;
     }
   }
 
   set pearlescent(String newPearlescent) {
-    this._pearlescent = newPearlescent;
+    if (newPearlescent.isNotEmpty) {
+      this._pearlescent = newPearlescent;
+    }
   }
 
   Map<String, dynamic> convertToMap() {

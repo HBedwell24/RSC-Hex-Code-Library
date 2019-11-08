@@ -6,7 +6,7 @@ import 'package:rsc_hex_code_library/screens/hex_code_detail.dart';
 import 'package:sqflite/sqflite.dart';
 
 class HexCodeList extends StatefulWidget {
-  
+
   @override
   State<StatefulWidget> createState() {
     return HexCodeState();
@@ -78,7 +78,7 @@ class HexCodeState extends State<HexCodeList> {
                           FlatButton(
                             child: const Text('DELETE'),
                             onPressed: () {
-                              _delete(context, hexCodeList[position]);
+                              _showDialog(context, position);
                             },
                           )
                         ],
@@ -90,12 +90,42 @@ class HexCodeState extends State<HexCodeList> {
     );
   }
 
+  void _showDialog(BuildContext context, int position) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Are you sure you want to delete the following item?"),
+          content: new Text("This action cannot be undone."),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("NO"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("YES"),
+              onPressed: () {
+                _delete(context, hexCodeList[position]);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget decideSubtitle(BuildContext context, int position) {
-    if (this.hexCodeList[position].pearlescent != null) {
-      return Text(this.hexCodeList[position].hexCode + ' w/ ' + this.hexCodeList[position].pearlescent + ' pearlescent');
+    if (this.hexCodeList[position].pearlescent.isEmpty) {
+      return Text(this.hexCodeList[position].hexCode);
     }
     else {
-      return Text(this.hexCodeList[position].hexCode);
+      return Text(this.hexCodeList[position].hexCode + ' w/ ' + this.hexCodeList[position].pearlescent + ' pearlescent');
     }
   }
 
@@ -110,7 +140,7 @@ class HexCodeState extends State<HexCodeList> {
   void _delete(BuildContext context, HexCode hexCode) async {
     int result = await databaseHelper.deleteHexCode(hexCode.id);
     if (result != 0) {
-      _showSnackBar(context, 'Hex Code Deleted Successfully!');
+      //_showSnackBar(context, 'Hex Code Deleted Successfully!');
       updateListView();
     }
   }
