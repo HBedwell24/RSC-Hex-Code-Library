@@ -26,6 +26,8 @@ class HexCodeDetailState extends State<HexCodeDetail> {
 
   DatabaseHelper helper = DatabaseHelper();
 
+  final _formKey = GlobalKey<FormState>();
+
   String appBarTitle;
   HexCode hexCode;
   String buttonText;
@@ -64,110 +66,105 @@ class HexCodeDetailState extends State<HexCodeDetail> {
           ),
           body: Padding(
             padding: EdgeInsets.only(top: 10.0, left: 20.0, right: 20.0),
-            child: ListView(
-              children: <Widget>[
-                Padding(
-                    padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                    child: TextFormField(
-                      controller: colorNameController,
-                      style: textStyle,
-                      onChanged: (value) {
-                        debugPrint('Something changed in Color Name Text Field');
-                        updateColorName();
-                      },
-                      decoration: InputDecoration(
-                          labelText: 'Color*',
-                          errorText: validateColor(colorNameController.text),
-                          labelStyle: textStyle,
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0))),
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                    child: TextFormField(
-                      controller: hexCodeController,
-                      style: textStyle,
-                      onChanged: (value) {
-                        debugPrint(
-                            'Something changed in Hex Code Text Field');
-                        updateHexCode();
-                      },
-                      decoration: InputDecoration(
-                          labelText: 'Hex Code*',
-                          errorText: validateHexColor(hexCodeController.text),
-                          labelStyle: textStyle,
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0))),
-                    )
-                ),
-                Container(
-                    padding: EdgeInsets.only(top: 15.0),
-                    height: 80.0,
-                    child: FormField<String>(
-                        builder: (FormFieldState<String> state) {
-                          return InputDecorator(
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5.0))),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                  hint: Text('Pearlescent'),
-                                  style: textStyle,
-                                  value: currentSelectedValue,
-                                  onChanged: (valueSelectedByUser) {
-                                    setState(() {
-                                      updatePearlescent(valueSelectedByUser);
-                                      currentSelectedValue = valueSelectedByUser;
-                                      debugPrint(
-                                          'User selected $valueSelectedByUser');
-                                    });
-                                  },
-                                  items: _pearlescents.map((String dropDownStringItem) {
-                                    return DropdownMenuItem<String>(
-                                      value: dropDownStringItem,
-                                      child: Text(dropDownStringItem),
-                                    );
-                                  }).toList(),
-                              ),
-                            ),
-                          );
+            child: Form(
+              key: _formKey,
+              child: ListView(
+                children: <Widget>[
+                  Padding(
+                      padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                      child: TextFormField(
+                        validator: (color) {
+                          if (color.isEmpty) {
+                            return "Field 'Color' is empty.";
+                          }
+                          else if (!(isAlpha(color))) {
+                            return "Non-alphanumeric characters were found in field 'Color'.";
+                          }
+                          else {
+                            return null;
+                          }
                         },
-                    ),
-                ),
-                Padding(
-                    padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: RaisedButton(
-                            color: Theme
-                                .of(context)
-                                .primaryColorDark,
-                            textColor: Theme
-                                .of(context)
-                                .primaryColorLight,
-                            child: Text(
-                              buttonText,
-                              textScaleFactor: 1.5,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                debugPrint('Save button clicked');
-                                if (validateColor(colorNameController.text) == null && validateHexColor(hexCodeController.text) == null) {
-                                  _save();
-                                }
-                              });
-                            },
-                          ),
-                        ),
-                        Container(
-                          width: 5.0,
-                        ),
-                        Expanded(
-                          child: Opacity(
-                            //wrap our button in an `Opacity` Widget
-                            opacity: isDisabled ? 1.0 : 0.0, //with 50% opacity
+                        controller: colorNameController,
+                        style: textStyle,
+                        onChanged: (value) {
+                          debugPrint('Something changed in Color Name Text Field');
+                          updateColorName();
+                        },
+                        decoration: InputDecoration(
+                            labelText: 'Color*',
+                            labelStyle: textStyle,
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0))),
+                      )),
+                  Padding(
+                      padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                      child: TextFormField(
+                        validator: (hexColor) {
+                          if (hexColor.isEmpty) {
+                            return "Field 'Hex Code' is empty.";
+                          }
+                          else if (!(isHexColor(hexColor))) {
+                            return "Invalid Hex color found in field 'Hex Code'.";
+                          }
+                          else {
+                            return null;
+                          }
+                        },
+                        controller: hexCodeController,
+                        style: textStyle,
+                        onChanged: (value) {
+                          debugPrint(
+                              'Something changed in Hex Code Text Field');
+                          updateHexCode();
+                        },
+                        decoration: InputDecoration(
+                            labelText: 'Hex Code*',
+                            labelStyle: textStyle,
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0))),
+                      )
+                  ),
+                  Container(
+                      padding: EdgeInsets.only(top: 15.0),
+                      height: 80.0,
+                      child: FormField<String>(
+                          builder: (FormFieldState<String> state) {
+                            return InputDecorator(
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5.0))),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                    hint: Text('Pearlescent'),
+                                    style: textStyle,
+                                    value: currentSelectedValue,
+                                    onChanged: (valueSelectedByUser) {
+                                      setState(() {
+                                        updatePearlescent(valueSelectedByUser);
+                                        currentSelectedValue = valueSelectedByUser;
+                                        debugPrint(
+                                            'User selected $valueSelectedByUser');
+                                      });
+                                    },
+                                    items: _pearlescents.map((String dropDownStringItem) {
+                                      return DropdownMenuItem<String>(
+                                        value: dropDownStringItem,
+                                        child: Text(dropDownStringItem),
+                                      );
+                                    }).toList(),
+                                ),
+                              ),
+                            );
+                          },
+                      ),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
                             child: RaisedButton(
+                              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                               color: Theme
                                   .of(context)
                                   .primaryColorDark,
@@ -175,21 +172,48 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                                   .of(context)
                                   .primaryColorLight,
                               child: Text(
-                                'Delete',
-                                textScaleFactor: 1.5,
+                                buttonText.toUpperCase(),
                               ),
-                              onPressed: isDisabled ? _delete : null
+                              onPressed: () {
+                                setState(() {
+                                  debugPrint('Save button clicked');
+                                  if (_formKey.currentState.validate()) {
+                                    _save();
+                                  }
+                                });
+                              },
                             ),
                           ),
-                        ),
-                      ],
+                          Container(
+                            width: 5.0,
+                          ),
+                          Expanded(
+                            child: Opacity(
+                              //wrap our button in an `Opacity` Widget
+                              opacity: isDisabled ? 1.0 : 0.0, //with 50% opacity
+                              child: RaisedButton(
+                                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                color: Theme
+                                    .of(context)
+                                    .primaryColorDark,
+                                textColor: Theme
+                                    .of(context)
+                                    .primaryColorLight,
+                                child: Text(
+                                  'Delete'.toUpperCase(),
+                                ),
+                                onPressed: isDisabled ? _delete : null
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ]
+                  ]
+                ),
               ),
             ),
-          ),
-        );
+          ));
   }
 
   void _showDialog(BuildContext context) {
@@ -262,27 +286,10 @@ class HexCodeDetailState extends State<HexCodeDetail> {
 
   String validateColor(String color) {
 
-    if (color.isEmpty) {
-      return "Field 'Color' is empty.";
-    }
 
-    else if (!(isAlpha(color))) {
-      return "Non-alphanumeric characters were found in field 'Color'.";
-    }
-    else {
-      return null;
-    }
   }
 
   String validateHexColor(String hexCode) {
-
-    if (hexCode.isEmpty) {
-      return "Field 'Hex Code' is empty.";
-    }
-
-    else if (!(isHexColor(hexCode))) {
-      return "Invalid Hex color found in field 'Hex Code'.";
-    }
   }
 
   void _delete() async {
