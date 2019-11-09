@@ -37,6 +37,8 @@ class HexCodeDetailState extends State<HexCodeDetail> {
   DatabaseHelper helper = DatabaseHelper();
 
   final _formKey = GlobalKey<FormState>();
+  final FocusNode _colorNameFocusNode = new FocusNode();
+  final FocusNode _hexCodeFocusNode = new FocusNode();
 
   String appBarTitle;
   HexCode hexCode;
@@ -83,6 +85,10 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                   Padding(
                       padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
                       child: TextFormField(
+                        focusNode: _colorNameFocusNode,
+                        textInputAction: TextInputAction.next,
+                        onEditingComplete: () =>
+                          FocusScope.of(context).requestFocus(_hexCodeFocusNode),
                         validator: (color) {
                           if (color.isEmpty) {
                             return "Field 'Color' is empty.";
@@ -97,7 +103,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                         controller: colorNameController,
                         style: textStyle,
                         onChanged: (value) {
-                          debugPrint('Something changed in Color Name Text Field');
+                          debugPrint("Something changed in 'Color' text field.");
                           updateColorName();
                         },
                         decoration: InputDecoration(
@@ -109,6 +115,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                   Padding(
                       padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
                       child: TextFormField(
+                        focusNode: _hexCodeFocusNode,
                         validator: (hexColor) {
                           if (hexColor.isEmpty) {
                             return "Field 'Hex Code' is empty.";
@@ -123,8 +130,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                         controller: hexCodeController,
                         style: textStyle,
                         onChanged: (value) {
-                          debugPrint(
-                              'Something changed in Hex Code Text Field');
+                          debugPrint("Something changed in 'Hex Code' text field.");
                           updateHexCode();
                         },
                         decoration: InputDecoration(
@@ -152,8 +158,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                                       setState(() {
                                         updatePearlescent(valueSelectedByUser);
                                         currentSelectedValue = valueSelectedByUser;
-                                        debugPrint(
-                                            'User selected $valueSelectedByUser');
+                                        debugPrint('User selected $valueSelectedByUser');
                                       });
                                     },
                                     items: _pearlescents.map((String dropDownStringItem) {
@@ -269,9 +274,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
   }
 
   void updatePearlescent(String pearlescent) {
-    if (pearlescent != 'No Selection') {
       hexCode.pearlescent = pearlescent;
-    }
   }
 
   void _save() async {
