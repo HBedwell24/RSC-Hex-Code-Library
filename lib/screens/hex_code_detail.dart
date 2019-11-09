@@ -203,9 +203,9 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                             width: 5.0,
                           ),
                           Expanded(
-                            child: Opacity(
+                            child: Visibility(
                               //wrap our button in an `Opacity` Widget
-                              opacity: isDisabled ? 1.0 : 0.0, //with 50% opacity
+                              visible: isDisabled ? true : false, //with 50% opacity
                               child: RaisedButton(
                                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                                 color: Theme
@@ -217,7 +217,12 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                                 child: Text(
                                   'Delete'.toUpperCase(),
                                 ),
-                                onPressed: isDisabled ? _delete : null
+                                onPressed: () {
+                                  setState(() {
+                                    debugPrint('Delete button clicked');
+                                    _delete();
+                                  });
+                                },
                               ),
                             ),
                           ),
