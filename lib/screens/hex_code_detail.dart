@@ -164,26 +164,24 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                           width: 5.0,
                         ),
                         Expanded(
-                          child: RaisedButton(
-                            color: Theme
-                                .of(context)
-                                .primaryColorDark,
-                            textColor: Theme
-                                .of(context)
-                                .primaryColorLight,
-                            child: Text(
-                              'Delete',
-                              textScaleFactor: 1.5,
+                          child: Opacity(
+                            //wrap our button in an `Opacity` Widget
+                            opacity: isDisabled ? 1.0 : 0.0, //with 50% opacity
+                            child: RaisedButton(
+                              color: Theme
+                                  .of(context)
+                                  .primaryColorDark,
+                              textColor: Theme
+                                  .of(context)
+                                  .primaryColorLight,
+                              child: Text(
+                                'Delete',
+                                textScaleFactor: 1.5,
+                              ),
+                              onPressed: isDisabled ? _delete : null
                             ),
-                            onPressed: () {
-                              isDisabled ? null : () =>
-                              setState(() {
-                                debugPrint('Delete button clicked');
-                                _delete();
-                              });
-                            },
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
