@@ -180,7 +180,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                         children: <Widget>[
                           Flexible(
                             child: RaisedButton(
-                              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
                               color: Theme
                                   .of(context)
                                   .primaryColorDark,
@@ -202,13 +202,13 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                             ),
                           ),
                           Container(
-                            width: 5.0,
+                            width: 10.0,
                           ),
                           Flexible(
                             child: Visibility(
                               visible: isDisabled ? true : false,
                               child: RaisedButton(
-                                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
                                 color: Colors.black,
                                 textColor: Theme
                                     .of(context)
