@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:rsc_hex_code_library/models/hex_code.dart';
 import 'package:rsc_hex_code_library/utils/database_helper.dart';
+import 'package:string_validator/string_validator.dart';
 
 class HexCodeDetail extends StatefulWidget {
   final String appBarTitle;
   final HexCode hexCode;
+  final String buttonText;
+  final bool isDisabled;
 
-  HexCodeDetail(this.hexCode, this.appBarTitle);
+  HexCodeDetail(this.hexCode, this.appBarTitle, this.buttonText, this.isDisabled);
 
   @override
   State<StatefulWidget> createState() {
-    return HexCodeDetailState(this.hexCode, this.appBarTitle);
+    return HexCodeDetailState(this.hexCode, this.appBarTitle, this.buttonText, this.isDisabled);
   }
 }
 
 class HexCodeDetailState extends State<HexCodeDetail> {
+
   static var _pearlescents = ['Black', 'Carbon Black', 'Graphite', 'Anthracite Black',
     'Black Steel', 'Dark Steel', 'Silver', 'Bluish Silver', 'Rolled Steel', 'Shadow Silver',
     'Stoner Silver', 'Midnight Silver', 'Cast Iron Silver', 'Red', 'Torino Red', 'Formula Red',
@@ -24,19 +28,23 @@ class HexCodeDetailState extends State<HexCodeDetail> {
 
   String appBarTitle;
   HexCode hexCode;
+  String buttonText;
+  bool isDisabled;
 
   TextEditingController colorNameController = TextEditingController();
   TextEditingController hexCodeController = TextEditingController();
 
-  HexCodeDetailState(this.hexCode, this.appBarTitle);
+  HexCodeDetailState(this.hexCode, this.appBarTitle, this.buttonText, this.isDisabled);
   var currentSelectedValue;
 
   @override
   Widget build(BuildContext context) {
+
     TextStyle textStyle = Theme.of(context).textTheme.title;
 
     colorNameController.text = hexCode.colorName;
     hexCodeController.text = hexCode.hexCode;
+
     if (hexCode.pearlescent.isNotEmpty) {
       currentSelectedValue = hexCode.pearlescent;
     }
@@ -60,7 +68,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
               children: <Widget>[
                 Padding(
                     padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                    child: TextField(
+                    child: TextFormField(
                       controller: colorNameController,
                       style: textStyle,
                       onChanged: (value) {
@@ -68,14 +76,15 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                         updateColorName();
                       },
                       decoration: InputDecoration(
-                          labelText: 'Color',
+                          labelText: 'Color*',
+                          errorText: validateColor(colorNameController.text),
                           labelStyle: textStyle,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
                     )),
                 Padding(
                     padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                    child: TextField(
+                    child: TextFormField(
                       controller: hexCodeController,
                       style: textStyle,
                       onChanged: (value) {
@@ -84,7 +93,8 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                         updateHexCode();
                       },
                       decoration: InputDecoration(
-                          labelText: 'Hex Code',
+                          labelText: 'Hex Code*',
+                          errorText: validateHexColor(hexCodeController.text),
                           labelStyle: textStyle,
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
@@ -137,13 +147,15 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                                 .of(context)
                                 .primaryColorLight,
                             child: Text(
-                              'Save',
+                              buttonText,
                               textScaleFactor: 1.5,
                             ),
                             onPressed: () {
                               setState(() {
                                 debugPrint('Save button clicked');
-                                _save();
+                                if (validateColor(colorNameController.text) == null && validateHexColor(hexCodeController.text) == null) {
+                                  _save();
+                                }
                               });
                             },
                           ),
@@ -164,6 +176,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                               textScaleFactor: 1.5,
                             ),
                             onPressed: () {
+                              isDisabled ? null : () =>
                               setState(() {
                                 debugPrint('Delete button clicked');
                                 _delete();
@@ -246,6 +259,31 @@ class HexCodeDetailState extends State<HexCodeDetail> {
     }
     else {
       _showAlertDialog('Status', 'Something went wrong! Please try again!');
+    }
+  }
+
+  String validateColor(String color) {
+
+    if (color.isEmpty) {
+      return "Field 'Color' is empty.";
+    }
+
+    else if (!(isAlpha(color))) {
+      return "Non-alphanumeric characters were found in field 'Color'.";
+    }
+    else {
+      return null;
+    }
+  }
+
+  String validateHexColor(String hexCode) {
+
+    if (hexCode.isEmpty) {
+      return "Field 'Hex Code' is empty.";
+    }
+
+    else if (!(isHexColor(hexCode))) {
+      return "Invalid Hex color found in field 'Hex Code'.";
     }
   }
 

@@ -33,7 +33,7 @@ class HexCodeState extends State<HexCodeList> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           debugPrint('FAB clicked');
-          navigateToDetailView(HexCode('', ''), 'Add Hex Code');
+          navigateToDetailView(HexCode('', ''), 'Add Hex Code', 'Submit', false);
         },
         tooltip: 'Add Note',
         child: Icon(Icons.add),
@@ -72,7 +72,7 @@ class HexCodeState extends State<HexCodeList> {
                           FlatButton(
                             child: const Text('EDIT'),
                             onPressed: () {
-                              navigateToDetailView(this.hexCodeList[position], 'Edit Hex Code');
+                              navigateToDetailView(this.hexCodeList[position], 'Edit Hex Code', 'Update', true);
                             },
                           ),
                           FlatButton(
@@ -150,9 +150,9 @@ class HexCodeState extends State<HexCodeList> {
     Scaffold.of(context).showSnackBar(snackBar);
   }
 
-  void navigateToDetailView(HexCode hexCode, String title) async {
+  void navigateToDetailView(HexCode hexCode, String title, String buttonText, bool isDisabled) async {
     bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return HexCodeDetail(hexCode, title);
+      return HexCodeDetail(hexCode, title, buttonText, isDisabled);
     }));
 
     if (result == true) {
