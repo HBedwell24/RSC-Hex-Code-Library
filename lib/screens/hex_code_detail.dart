@@ -268,6 +268,8 @@ class HexCodeDetailState extends State<HexCodeDetail> {
 
     moveToLastScreen();
     int result;
+    String verb;
+    isDisabled ? verb = 'Updated' : verb = 'Saved';
 
     if (hexCode.id != null) {
       result = await helper.updateHexCode(hexCode);
@@ -277,7 +279,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
     }
 
     if (result != 0) {
-      _showAlertDialog('Status', 'Hex Code Saved Successfully!');
+      _showAlertDialog('Status', 'Hex Code ' + verb + ' Successfully!');
     }
     else {
       _showAlertDialog('Status', 'Something went wrong! Please try again!');
