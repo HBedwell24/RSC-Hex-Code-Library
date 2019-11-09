@@ -176,8 +176,9 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                   Padding(
                       padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Expanded(
+                          Flexible(
                             child: RaisedButton(
                               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                               color: Theme
@@ -202,10 +203,9 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                           Container(
                             width: 5.0,
                           ),
-                          Expanded(
+                          Flexible(
                             child: Visibility(
-                              //wrap our button in an `Opacity` Widget
-                              visible: isDisabled ? true : false, //with 50% opacity
+                              visible: isDisabled ? true : false,
                               child: RaisedButton(
                                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                                 color: Theme
