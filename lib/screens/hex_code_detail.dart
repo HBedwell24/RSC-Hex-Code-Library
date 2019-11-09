@@ -22,7 +22,17 @@ class HexCodeDetailState extends State<HexCodeDetail> {
   static var _pearlescents = ['Black', 'Carbon Black', 'Graphite', 'Anthracite Black',
     'Black Steel', 'Dark Steel', 'Silver', 'Bluish Silver', 'Rolled Steel', 'Shadow Silver',
     'Stoner Silver', 'Midnight Silver', 'Cast Iron Silver', 'Red', 'Torino Red', 'Formula Red',
-    'Lava Red', 'Blaze Red', 'Grace Red', 'Garnet Red', 'Sunset Red', 'Cabernet Red'];
+    'Lava Red', 'Blaze Red', 'Grace Red', 'Garnet Red', 'Sunset Red', 'Cabernet Red', 'Cabernet',
+    'Wine Red', 'Candy Red', 'Hot Pink', 'Pfister Pink', 'Salmon Pink', 'Sunrise Orange',
+    'Orange', 'Bright Orange', 'Gold', 'Bronze', 'Yellow', 'Race Yellow', 'Dew Yellow', 'Dark Green',
+    'Racing Green', 'Sea Green', 'Olive Green', 'Bright Green', 'Gasoline Green', 'Lime Green',
+    'Midnight Blue', 'Galaxy Blue', 'Dark Blue', 'Saxon Blue', 'Blue', 'Mariner Blue', 'Harbor Blue',
+    'Diamond Blue', 'Surf Blue', 'Nautical Blue', 'Racing Blue', 'Ultra Blue', 'Light Blue',
+    'Chocolate Brown', 'Bison Brown', 'Creek Brown', 'Feltzer Brown', 'Maple Brown', 'Beechwood Brown',
+    'Sienna Brown', 'Saddle Brown', 'Moss Brown', 'Woodbeech Brown', 'Straw Brown', 'Sandy Brown',
+    'Bleached Brown', 'Schafter Purple', 'Spinnaker Purple', 'Midnight Purple', 'Bright Purple',
+    'Cream', 'Ice White', 'Frost White'
+    ];
 
   DatabaseHelper helper = DatabaseHelper();
 
@@ -269,7 +279,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
     moveToLastScreen();
     int result;
     String verb;
-    isDisabled ? verb = 'Updated' : verb = 'Saved';
+    isDisabled ? verb = 'updated' : verb = 'saved';
 
     if (hexCode.id != null) {
       result = await helper.updateHexCode(hexCode);
@@ -279,7 +289,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
     }
 
     if (result != 0) {
-      _showAlertDialog('Status', 'Hex Code ' + verb + ' Successfully!');
+      _showAlertDialog('Status', 'Hex code ' + verb + ' successfully!');
     }
     else {
       _showAlertDialog('Status', 'Something went wrong! Please try again!');
@@ -298,16 +308,16 @@ class HexCodeDetailState extends State<HexCodeDetail> {
     moveToLastScreen();
 
     if (hexCode.id == null) {
-      _showAlertDialog('Status', 'No Note Was Deleted!');
+      _showAlertDialog('Status', 'No Hex code was deleted!');
       return;
     }
 
     int result = await helper.deleteHexCode(hexCode.id);
     if (result != 0) {
-      _showAlertDialog('Status', 'Hex Code Was Deleted Successfully!');
+      _showAlertDialog('Status', 'Hex code was deleted successfully!');
     }
     else {
-      _showAlertDialog('Status', 'Deletion Unsuccessful!');
+      _showAlertDialog('Status', 'Deletion unsuccessful!');
     }
   }
 
