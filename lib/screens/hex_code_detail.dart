@@ -220,7 +220,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                                 onPressed: () {
                                   setState(() {
                                     debugPrint('Delete button clicked');
-                                    _delete();
+                                    _showDialog(context);
                                   });
                                 },
                               ),
@@ -256,8 +256,8 @@ class HexCodeDetailState extends State<HexCodeDetail> {
             new FlatButton(
               child: new Text("YES"),
               onPressed: () {
-                _delete();
                 Navigator.of(context).pop();
+                _delete();
               },
             ),
           ],
