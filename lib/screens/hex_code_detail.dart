@@ -189,6 +189,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                                   .primaryColorLight,
                               child: Text(
                                 buttonText.toUpperCase(),
+                                style: new TextStyle(fontWeight: FontWeight.bold),
                               ),
                               onPressed: () {
                                 setState(() {
@@ -208,14 +209,13 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                               visible: isDisabled ? true : false,
                               child: RaisedButton(
                                 padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                color: Theme
-                                    .of(context)
-                                    .primaryColorDark,
+                                color: Colors.black,
                                 textColor: Theme
                                     .of(context)
                                     .primaryColorLight,
                                 child: Text(
                                   'Delete'.toUpperCase(),
+                                  style: new TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -302,14 +302,6 @@ class HexCodeDetailState extends State<HexCodeDetail> {
     else {
       _showAlertDialog('Status', 'Something went wrong! Please try again!');
     }
-  }
-
-  String validateColor(String color) {
-
-
-  }
-
-  String validateHexColor(String hexCode) {
   }
 
   void _delete() async {
