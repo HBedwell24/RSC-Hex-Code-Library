@@ -90,15 +90,25 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                         onEditingComplete: () =>
                           FocusScope.of(context).requestFocus(_hexCodeFocusNode),
                         validator: (color) {
+                          // if color field is empty, prompt error
                           if (color.isEmpty) {
                             return "Field 'Color' is empty.";
                           }
-                          else if (!(isAlpha(color))) {
-                            return "Non-alphanumeric characters were found in field 'Color'.";
-                          }
+                          // if color field is not empty
                           else {
-                            return null;
+                            // loop through color string
+                            for(int i = 0; i < color.length; i++) {
+                              // if color field contains numeric characters or a space, valid color name
+                              if(isAlpha(color[i]) || color[i].contains(' ')) {
+                                return null;
+                              }
+                              // if color field contains non-numeric characters, prompt error
+                              else {
+                                return "Non-alphanumeric characters were found in field 'Color'.";
+                              }
+                            }
                           }
+                          return null;
                         },
                         controller: colorNameController,
                         style: textStyle,
@@ -117,14 +127,20 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                       child: TextFormField(
                         focusNode: _hexCodeFocusNode,
                         validator: (hexColor) {
+                          // if hex field is empty, prompt error
                           if (hexColor.isEmpty) {
                             return "Field 'Hex Code' is empty.";
                           }
-                          else if (!(isHexColor(hexColor))) {
-                            return "Invalid Hex color found in field 'Hex Code'.";
-                          }
+                          // if hex field is not empty
                           else {
-                            return null;
+                            // if hex field is not a valid color, prompt error
+                            if (!(isHexColor(hexColor))) {
+                              return "Invalid Hex color found in field 'Hex Code'.";
+                            }
+                            // if hex field is valid color
+                            else {
+                              return null;
+                            }
                           }
                         },
                         controller: hexCodeController,
