@@ -6,8 +6,9 @@ import 'package:rsc_hex_code_library/utils/database_helper.dart';
 import 'package:rsc_hex_code_library/screens/hex_code_detail.dart';
 import 'package:sqflite/sqflite.dart';
 
-class HexCodeList extends StatefulWidget {
+import 'hex_code_share.dart';
 
+class HexCodeList extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return HexCodeState();
@@ -36,28 +37,29 @@ class HexCodeState extends State<HexCodeList> {
         animatedIconTheme: IconThemeData(size: 22.0),
         closeManually: false,
         elevation: 8.0,
+        tooltip: 'Menu',
         shape: CircleBorder(),
         children: [
           SpeedDialChild(
               child: Icon(Icons.add),
               backgroundColor: Colors.blue,
-              label: 'Add Hex Color',
+              label: 'Add Hex Code',
               labelStyle: TextStyle(fontSize: 18.0),
               onTap: () {
                 debugPrint('FAB clicked');
-                navigateToDetailView(HexCode('', ''), 'Add Hex Code', 'Submit', false);
-              }
-          ),
+                navigateToDetailView(
+                    HexCode('', ''), 'Add Hex Code', 'Submit', false);
+              }),
           SpeedDialChild(
             child: Icon(Icons.share),
             backgroundColor: Colors.blue,
-            label: 'Share Hex Color(s)',
+            label: 'Share Hex Code(s)',
             labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () => print('SECOND CHILD'),
+            onTap: () {
+              navigateToShareView();
+            },
           ),
         ],
-        tooltip: 'Menu',
-        child: Icon(Icons.add),
       ),
     );
   }
@@ -70,45 +72,45 @@ class HexCodeState extends State<HexCodeList> {
       itemBuilder: (BuildContext context, int position) {
         return Center(
             child: Card(
-                color: Colors.white, elevation: 2.0,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+          color: Colors.white,
+          elevation: 2.0,
+          child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+            ListTile(
+              leading: Container(
+                width: 42.0,
+                height: 42.0,
+                decoration: BoxDecoration(
+                    color: Color(
+                        convertHexCode(this.hexCodeList[position].hexCode))),
+              ),
+              title: Text(
+                this.hexCodeList[position].colorName,
+              ),
+              subtitle: decideSubtitle(context, position),
+            ),
+            ButtonTheme.bar(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  ListTile(
-                    leading: Container(
-                      width: 42.0,
-                      height: 42.0,
-                      decoration: BoxDecoration(
-                          color: Color(
-                              convertHexCode(this.hexCodeList[position].hexCode))),
-                    ),
-                    title: Text(
-                      this.hexCodeList[position].colorName,
-                    ),
-                    subtitle: decideSubtitle(context, position),
+                  FlatButton(
+                    child: const Text('EDIT'),
+                    onPressed: () {
+                      navigateToDetailView(this.hexCodeList[position],
+                          'Edit Hex Code', 'Update', true);
+                    },
                   ),
-                    ButtonTheme.bar(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          FlatButton(
-                            child: const Text('EDIT'),
-                            onPressed: () {
-                              navigateToDetailView(this.hexCodeList[position], 'Edit Hex Code', 'Update', true);
-                            },
-                          ),
-                          FlatButton(
-                            child: const Text('DELETE'),
-                            onPressed: () {
-                              _showDialog(context, position);
-                            },
-                          )
-                        ],
-                      ),
-                    )
-                  ]),
-              ));
-            },
+                  FlatButton(
+                    child: const Text('DELETE'),
+                    onPressed: () {
+                      _showDialog(context, position);
+                    },
+                  )
+                ],
+              ),
+            )
+          ]),
+        ));
+      },
     );
   }
 
@@ -119,7 +121,8 @@ class HexCodeState extends State<HexCodeList> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Are you sure you want to delete the following item?"),
+          title:
+              new Text("Are you sure you want to delete the following item?"),
           content: new Text("This action cannot be undone."),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
@@ -145,9 +148,11 @@ class HexCodeState extends State<HexCodeList> {
   Widget decideSubtitle(BuildContext context, int position) {
     if (this.hexCodeList[position].pearlescent.isEmpty) {
       return Text(this.hexCodeList[position].hexCode);
-    }
-    else {
-      return Text(this.hexCodeList[position].hexCode + ' w/ ' + this.hexCodeList[position].pearlescent + ' pearlescent');
+    } else {
+      return Text(this.hexCodeList[position].hexCode +
+          ' w/ ' +
+          this.hexCodeList[position].pearlescent +
+          ' pearlescent');
     }
   }
 
@@ -172,9 +177,20 @@ class HexCodeState extends State<HexCodeList> {
     Scaffold.of(context).showSnackBar(snackBar);
   }
 
-  void navigateToDetailView(HexCode hexCode, String title, String buttonText, bool isDisabled) async {
+  void navigateToDetailView(
+      HexCode hexCode, String title, String buttonText, bool isDisabled) async {
+      bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return HexCodeDetail(hexCode, title, buttonText, isDisabled);
+      }));
+
+    if (result == true) {
+      updateListView();
+    }
+  }
+
+  void navigateToShareView() async {
     bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return HexCodeDetail(hexCode, title, buttonText, isDisabled);
+      return HexCodeShare();
     }));
 
     if (result == true) {
