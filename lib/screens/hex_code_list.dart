@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:rsc_hex_code_library/models/hex_code.dart';
 import 'package:rsc_hex_code_library/utils/database_helper.dart';
 import 'package:rsc_hex_code_library/screens/hex_code_detail.dart';
@@ -30,12 +31,32 @@ class HexCodeState extends State<HexCodeList> {
         title: Text('Hex Codes'),
       ),
       body: getHexCodeListView(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          debugPrint('FAB clicked');
-          navigateToDetailView(HexCode('', ''), 'Add Hex Code', 'Submit', false);
-        },
-        tooltip: 'Add Note',
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        animatedIconTheme: IconThemeData(size: 22.0),
+        closeManually: false,
+        elevation: 8.0,
+        shape: CircleBorder(),
+        children: [
+          SpeedDialChild(
+              child: Icon(Icons.add),
+              backgroundColor: Colors.blue,
+              label: 'Add Hex Color',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () {
+                debugPrint('FAB clicked');
+                navigateToDetailView(HexCode('', ''), 'Add Hex Code', 'Submit', false);
+              }
+          ),
+          SpeedDialChild(
+            child: Icon(Icons.share),
+            backgroundColor: Colors.blue,
+            label: 'Share Hex Color(s)',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () => print('SECOND CHILD'),
+          ),
+        ],
+        tooltip: 'Menu',
         child: Icon(Icons.add),
       ),
     );
@@ -67,7 +88,8 @@ class HexCodeState extends State<HexCodeList> {
                     subtitle: decideSubtitle(context, position),
                   ),
                     ButtonTheme.bar(
-                      child: ButtonBar(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           FlatButton(
                             child: const Text('EDIT'),
