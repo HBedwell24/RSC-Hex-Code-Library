@@ -45,7 +45,7 @@ class HexCodeState extends State<HexCodeList> {
               labelStyle: TextStyle(fontSize: 18.0),
               onTap: () {
                 debugPrint('FAB clicked');
-                navigateToDetailView(HexCode('', ''), 'Add Hex Code', 'Submit', false);
+                navigateToDetailView(HexCode('', '', false), 'Add Hex Code', 'Submit', false);
               }
           ),
           SpeedDialChild(
@@ -62,6 +62,7 @@ class HexCodeState extends State<HexCodeList> {
     );
   }
 
+  // adapter for hex code list tile
   ListView getHexCodeListView() {
     TextStyle titleStyle = Theme.of(context).textTheme.subhead;
 
@@ -69,46 +70,61 @@ class HexCodeState extends State<HexCodeList> {
       itemCount: count,
       itemBuilder: (BuildContext context, int position) {
         return Center(
-            child: Card(
-                color: Colors.white, elevation: 2.0,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  ListTile(
-                    leading: Container(
-                      width: 42.0,
-                      height: 42.0,
-                      decoration: BoxDecoration(
-                          color: Color(
-                              convertHexCode(this.hexCodeList[position].hexCode))),
-                    ),
-                    title: Text(
-                      this.hexCodeList[position].colorName,
-                    ),
-                    subtitle: decideSubtitle(context, position),
+          child: Card(
+            color: Colors.white, elevation: 2.0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Visibility(
+                  visible: true,
+                  child: CheckboxListTile(
+                    value: hexCodeList[position].isSelected,
+                    onChanged: (bool newValue) {
+                      setState(() {
+                        hexCodeList[position].isSelected = newValue;
+                      });
+                    },
                   ),
-                    ButtonTheme.bar(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          FlatButton(
-                            child: const Text('EDIT'),
-                            onPressed: () {
-                              navigateToDetailView(this.hexCodeList[position], 'Edit Hex Code', 'Update', true);
-                            },
-                          ),
-                          FlatButton(
-                            child: const Text('DELETE'),
-                            onPressed: () {
-                              _showDialog(context, position);
-                            },
-                          )
-                        ],
+                ),
+                ListTile(
+                  leading: Container(
+                    width: 42.0,
+                    height: 42.0,
+                    decoration: BoxDecoration(
+                      color: Color(
+                        convertHexCode(this.hexCodeList[position].hexCode)
+                      )
+                    ),
+                  ),
+                  title: Text(
+                    this.hexCodeList[position].colorName,
+                  ),
+                  subtitle: decideSubtitle(context, position),
+                ),
+                ButtonTheme.bar(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      FlatButton(
+                        child: const Text('EDIT'),
+                        onPressed: () {
+                          navigateToDetailView(this.hexCodeList[position], 'Edit Hex Code', 'Update', true);
+                        },
                       ),
-                    )
-                  ]),
-              ));
-            },
+                      FlatButton(
+                        child: const Text('DELETE'),
+                        onPressed: () {
+                          _showDialog(context, position);
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
