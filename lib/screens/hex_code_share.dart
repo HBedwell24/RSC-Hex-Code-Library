@@ -41,21 +41,32 @@ class HexCodeState extends State<HexCodeShare> {
       body: getHexCodeListView(),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 0.0),
-        child: RaisedButton(
-          onPressed: () {
-            setState(() {
-              debugPrint('Share button clicked');
-              StringBuffer stringBuffer = new StringBuffer();
-              for (int i = 0; i < shareList.length; i++) {
-                stringBuffer.write(shareList[i] + "\n" + "----------------------"
-                    "----------------------------------------------\n");
-              }
-              Share.share(stringBuffer.toString());
-            });
-          },
-          color: Colors.blue,
-          textColor: Colors.white,
-          child: Text('Share'),
+        child: Visibility(
+          visible: shareList.length > 0 ? true : false,
+          child: RaisedButton(
+            padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+            color: Theme
+                .of(context)
+                .primaryColorDark,
+            textColor: Theme
+                .of(context)
+                .primaryColorLight,
+            child: Text(
+              'Share'.toUpperCase(),
+              style: new TextStyle(fontWeight: FontWeight.bold),
+            ),
+            onPressed: () {
+              setState(() {
+                debugPrint('Share button clicked');
+                StringBuffer stringBuffer = new StringBuffer();
+                for (int i = 0; i < shareList.length; i++) {
+                  stringBuffer.write(shareList[i] + "\n" + "----------------------"
+                      "----------------------------------------------\n");
+                }
+                Share.share(stringBuffer.toString());
+              });
+            },
+          ),
         ),
       ),
     );
