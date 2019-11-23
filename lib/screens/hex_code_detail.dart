@@ -64,193 +64,203 @@ class HexCodeDetailState extends State<HexCodeDetail> {
     }
 
     return WillPopScope(
-        onWillPop: () {
-          moveToLastScreen();
-          return Future.value(false);
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(appBarTitle),
-            leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  moveToLastScreen();
-                }),
+      onWillPop: () {
+        moveToLastScreen();
+        return Future.value(false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(appBarTitle),
+          // up navigation to parent activity
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              moveToLastScreen();
+            }
           ),
-          body: Padding(
-            padding: EdgeInsets.only(top: 10.0, left: 20.0, right: 20.0),
-            child: Form(
-              key: _formKey,
-              child: ListView(
-                children: <Widget>[
-                  Padding(
-                      padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                      child: TextFormField(
-                        focusNode: _colorNameFocusNode,
-                        textInputAction: TextInputAction.next,
-                        onEditingComplete: () =>
-                          FocusScope.of(context).requestFocus(_hexCodeFocusNode),
-                        validator: (color) {
-                          // if color field is empty, prompt error
-                          if (color.isEmpty) {
-                            return "Field 'Color' is empty.";
+        ),
+        body: Padding(
+          padding: EdgeInsets.only(top: 10.0, left: 20.0, right: 20.0),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                  child: TextFormField(
+                    focusNode: _colorNameFocusNode,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () =>
+                        FocusScope.of(context).requestFocus(_hexCodeFocusNode),
+                    validator: (color) {
+                      // if color field is empty, prompt error
+                      if (color.isEmpty) {
+                        return "Field 'Color' is empty.";
+                      }
+                      // if color field is not empty
+                      else {
+                        // loop through color string
+                        for(int i = 0; i < color.length; i++) {
+                          // if color field contains numeric characters or a space, valid color name
+                          if(isAlpha(color[i]) || color[i].contains(' ')) {
+                            return null;
                           }
-                          // if color field is not empty
+                          // if color field contains non-numeric characters, prompt error
                           else {
-                            // loop through color string
-                            for(int i = 0; i < color.length; i++) {
-                              // if color field contains numeric characters or a space, valid color name
-                              if(isAlpha(color[i]) || color[i].contains(' ')) {
-                                return null;
-                              }
-                              // if color field contains non-numeric characters, prompt error
-                              else {
-                                return "Non-alphanumeric characters were found in field 'Color'.";
-                              }
-                            }
+                            return "Non-alphanumeric characters were found in field 'Color'.";
                           }
-                          return null;
-                        },
-                        controller: colorNameController,
-                        style: textStyle,
-                        onChanged: (value) {
-                          debugPrint("Something changed in 'Color' text field.");
-                          updateColorName();
-                        },
-                        decoration: InputDecoration(
-                            labelText: 'Color*',
-                            labelStyle: textStyle,
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0))),
-                      )),
-                  Padding(
-                      padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                      child: TextFormField(
-                        focusNode: _hexCodeFocusNode,
-                        validator: (hexColor) {
-                          // if hex field is empty, prompt error
-                          if (hexColor.isEmpty) {
-                            return "Field 'Hex Code' is empty.";
-                          }
-                          // if hex field is not empty
-                          else {
-                            // if hex field is not a valid color, prompt error
-                            if (!(isHexColor(hexColor))) {
-                              return "Invalid Hex color found in field 'Hex Code'.";
-                            }
-                            // if hex field is valid color
-                            else {
-                              return null;
-                            }
-                          }
-                        },
-                        controller: hexCodeController,
-                        style: textStyle,
-                        onChanged: (value) {
-                          debugPrint("Something changed in 'Hex Code' text field.");
-                          updateHexCode();
-                        },
-                        decoration: InputDecoration(
-                            labelText: 'Hex Code*',
-                            labelStyle: textStyle,
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0))),
-                      )
-                  ),
-                  Container(
-                      padding: EdgeInsets.only(top: 15.0),
-                      height: 80.0,
-                      child: FormField<String>(
-                          builder: (FormFieldState<String> state) {
-                            return InputDecorator(
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5.0))),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                    hint: Text('Pearlescent'),
-                                    style: textStyle,
-                                    value: currentSelectedValue,
-                                    onChanged: (valueSelectedByUser) {
-                                      setState(() {
-                                        updatePearlescent(valueSelectedByUser);
-                                        currentSelectedValue = valueSelectedByUser;
-                                        debugPrint('User selected $valueSelectedByUser');
-                                      });
-                                    },
-                                    items: _pearlescents.map((String dropDownStringItem) {
-                                      return DropdownMenuItem<String>(
-                                        value: dropDownStringItem,
-                                        child: Text(dropDownStringItem),
-                                      );
-                                    }).toList(),
-                                ),
-                              ),
-                            );
-                          },
-                      ),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Flexible(
-                            child: RaisedButton(
-                              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                              color: Theme
-                                  .of(context)
-                                  .primaryColorDark,
-                              textColor: Theme
-                                  .of(context)
-                                  .primaryColorLight,
-                              child: Text(
-                                buttonText.toUpperCase(),
-                                style: new TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  debugPrint('Save button clicked');
-                                  if (_formKey.currentState.validate()) {
-                                    _save();
-                                  }
-                                });
-                              },
-                            ),
-                          ),
-                          Container(
-                            width: 10.0,
-                          ),
-                          Flexible(
-                            child: Visibility(
-                              visible: isDisabled ? true : false,
-                              child: RaisedButton(
-                                padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                                color: Colors.black,
-                                textColor: Theme
-                                    .of(context)
-                                    .primaryColorLight,
-                                child: Text(
-                                  'Delete'.toUpperCase(),
-                                  style: new TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    debugPrint('Delete button clicked');
-                                    _showDialog(context);
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
+                        }
+                      }
+                      return null;
+                    },
+                    controller: colorNameController,
+                    style: textStyle,
+                    onChanged: (value) {
+                      debugPrint("Something changed in 'Color' text field.");
+                      updateColorName();
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Color*',
+                      labelStyle: textStyle,
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0)
                       ),
                     ),
-                  ]
+                  ),
                 ),
-              ),
+                Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                  child: TextFormField(
+                    focusNode: _hexCodeFocusNode,
+                    validator: (hexColor) {
+                      // if hex field is empty, prompt error
+                      if (hexColor.isEmpty) {
+                        return "Field 'Hex Code' is empty.";
+                      }
+                      // if hex field is not empty
+                      else {
+                        // if hex field is not a valid color, prompt error
+                        if (!(isHexColor(hexColor))) {
+                          return "Invalid Hex color found in field 'Hex Code'.";
+                        }
+                        // if hex field is valid color
+                        else {
+                          return null;
+                        }
+                      }
+                    },
+                    controller: hexCodeController,
+                    style: textStyle,
+                    onChanged: (value) {
+                      debugPrint("Something changed in 'Hex Code' text field.");
+                      updateHexCode();
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Hex Code*',
+                      labelStyle: textStyle,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0)
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 15.0),
+                  height: 80.0,
+                  child: FormField<String>(
+                    builder: (FormFieldState<String> state) {
+                      return InputDecorator(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0)
+                          ),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            hint: Text('Pearlescent'),
+                            style: textStyle,
+                            value: currentSelectedValue,
+                            onChanged: (valueSelectedByUser) {
+                              setState(() {
+                                updatePearlescent(valueSelectedByUser);
+                                currentSelectedValue = valueSelectedByUser;
+                                debugPrint('User selected $valueSelectedByUser');
+                              });
+                            },
+                            items: _pearlescents.map((String dropDownStringItem) {
+                              return DropdownMenuItem<String>(
+                                value: dropDownStringItem,
+                                child: Text(dropDownStringItem),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Flexible(
+                        child: RaisedButton(
+                          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                          color: Theme
+                            .of(context)
+                            .primaryColorDark,
+                          textColor: Theme
+                            .of(context)
+                            .primaryColorLight,
+                          child: Text(
+                            buttonText.toUpperCase(),
+                            style: new TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              debugPrint('Save button clicked');
+                              if (_formKey.currentState.validate()) {
+                                _save();
+                              }
+                            });
+                          },
+                        ),
+                      ),
+                      Container(
+                        width: 10.0,
+                      ),
+                      Flexible(
+                        child: Visibility(
+                          visible: isDisabled ? true : false,
+                          child: RaisedButton(
+                            padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                            color: Colors.black,
+                            textColor: Theme
+                              .of(context)
+                              .primaryColorLight,
+                            child: Text(
+                              'Delete'.toUpperCase(),
+                              style: new TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                debugPrint('Delete button clicked');
+                                _showDialog(context);
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ));
+          ),
+        ),
+      ),
+    );
   }
 
   void _showDialog(BuildContext context) {

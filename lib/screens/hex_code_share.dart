@@ -38,42 +38,43 @@ class HexCodeState extends State<HexCodeShare> {
         moveToLastScreen();
         return Future.value(false);
       },
-    child: Scaffold(
-      appBar: AppBar(
-        title: Text('Share Hex Code(s)'),
-      ),
-      body: getHexCodeListView(),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 0.0),
-        child: Visibility(
-          visible: shareList.length > 0 ? true : false,
-          child: RaisedButton(
-            padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-            color: Theme
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Share Hex Code(s)'),
+        ),
+        body: getHexCodeListView(),
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 0.0),
+          child: Visibility(
+            visible: shareList.length > 0 ? true : false,
+            child: RaisedButton(
+              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+              color: Theme
                 .of(context)
                 .primaryColorDark,
-            textColor: Theme
+              textColor: Theme
                 .of(context)
                 .primaryColorLight,
-            child: Text(
-              'Share'.toUpperCase(),
-              style: new TextStyle(fontWeight: FontWeight.bold),
+              child: Text(
+                'Share'.toUpperCase(),
+                style: new TextStyle(fontWeight: FontWeight.bold),
+              ),
+              onPressed: () {
+                setState(() {
+                  debugPrint('Share button clicked');
+                  StringBuffer stringBuffer = new StringBuffer();
+                  for (int i = 0; i < shareList.length; i++) {
+                    stringBuffer.write(shareList[i] + "\n" + "----------------------"
+                        "----------------------------------------------\n");
+                  }
+                  Share.share(stringBuffer.toString());
+                });
+              },
             ),
-            onPressed: () {
-              setState(() {
-                debugPrint('Share button clicked');
-                StringBuffer stringBuffer = new StringBuffer();
-                for (int i = 0; i < shareList.length; i++) {
-                  stringBuffer.write(shareList[i] + "\n" + "----------------------"
-                      "----------------------------------------------\n");
-                }
-                Share.share(stringBuffer.toString());
-              });
-            },
           ),
         ),
       ),
-    ));
+    );
   }
 
   ListView getHexCodeListView() {
@@ -94,7 +95,7 @@ class HexCodeState extends State<HexCodeShare> {
                     height: 42.0,
                     decoration: BoxDecoration(
                       color: Color(
-                          convertHexCode(this.hexCodeList[position].hexCode)
+                        convertHexCode(this.hexCodeList[position].hexCode)
                       )
                     ),
                   ),
@@ -110,7 +111,7 @@ class HexCodeState extends State<HexCodeShare> {
                         if (this.hexCodeList[position].isSelected == true) {
                           if (this.hexCodeList[position].pearlescent.isNotEmpty) {
                             shareList.add(this.hexCodeList[position].colorName + " (" + this.hexCodeList[position].hexCode + ") w/ " +
-                                this.hexCodeList[position].pearlescent + " Pearlescent");
+                              this.hexCodeList[position].pearlescent + " Pearlescent");
                             print("ShareList: " + shareList.toString());
                           }
                           else {
@@ -121,7 +122,7 @@ class HexCodeState extends State<HexCodeShare> {
                         else {
                           if (this.hexCodeList[position].pearlescent.isNotEmpty) {
                             shareList.remove(this.hexCodeList[position].colorName + " (" + this.hexCodeList[position].hexCode + ") w/ " +
-                                this.hexCodeList[position].pearlescent + " Pearlescent");
+                              this.hexCodeList[position].pearlescent + " Pearlescent");
                             print("ShareList: " + shareList.toString());
                           }
                           else {
@@ -152,8 +153,8 @@ class HexCodeState extends State<HexCodeShare> {
     }
     else {
       return Text(this.hexCodeList[position].hexCode +
-          ' w/ ' + this.hexCodeList[position].pearlescent +
-          ' pearlescent');
+        ' w/ ' + this.hexCodeList[position].pearlescent +
+        ' pearlescent');
     }
   }
 
