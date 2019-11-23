@@ -33,8 +33,12 @@ class HexCodeState extends State<HexCodeShare> {
       hexCodeList = List<HexCode>();
       updateListView();
     }
-
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () {
+        moveToLastScreen();
+        return Future.value(false);
+      },
+    child: Scaffold(
       appBar: AppBar(
         title: Text('Share Hex Code(s)'),
       ),
@@ -69,7 +73,7 @@ class HexCodeState extends State<HexCodeShare> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   ListView getHexCodeListView() {
@@ -135,6 +139,11 @@ class HexCodeState extends State<HexCodeShare> {
         );
       },
     );
+  }
+
+  void moveToLastScreen() {
+    shareList.clear();
+    Navigator.pop(context, true);
   }
 
   Widget decideSubtitle(BuildContext context, int position) {

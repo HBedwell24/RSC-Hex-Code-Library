@@ -66,6 +66,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
     return WillPopScope(
         onWillPop: () {
           moveToLastScreen();
+          return Future.value(false);
         },
         child: Scaffold(
           appBar: AppBar(
