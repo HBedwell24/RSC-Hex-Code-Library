@@ -5,8 +5,11 @@ import 'package:rsc_hex_code_library/utils/database_helper.dart';
 import 'package:share/share.dart';
 import 'package:sqflite/sqflite.dart';
 
+List<String> shareList = List<String>();
+
 class HexCodeShare extends StatefulWidget {
-  bool checkBoxSelected;
+
+  final bool checkBoxSelected;
 
   HexCodeShare(this.checkBoxSelected);
 
@@ -42,7 +45,12 @@ class HexCodeState extends State<HexCodeShare> {
           onPressed: () {
             setState(() {
               debugPrint('Share button clicked');
-              Share.share('Share button clicked!');
+              StringBuffer stringBuffer = new StringBuffer();
+              for (int i = 0; i < shareList.length; i++) {
+                stringBuffer.write(shareList[i] + "\n" + "----------------------"
+                    "----------------------------------------------\n");
+              }
+              Share.share(stringBuffer.toString());
             });
           },
           color: Colors.blue,
@@ -54,6 +62,7 @@ class HexCodeState extends State<HexCodeShare> {
   }
 
   ListView getHexCodeListView() {
+
     return ListView.builder(
       itemCount: count,
       itemBuilder: (BuildContext context, int position) {
@@ -79,10 +88,32 @@ class HexCodeState extends State<HexCodeShare> {
                   ),
                   subtitle: decideSubtitle(context, position),
                   trailing: Checkbox(
-                    value: checkBoxSelected,
+                    value: this.hexCodeList[position].isSelected == true,
                     onChanged: (bool value) {
                       setState(() {
-                        checkBoxSelected = value;
+                        this.hexCodeList[position].isSelected = value;
+                        if (this.hexCodeList[position].isSelected == true) {
+                          if (this.hexCodeList[position].pearlescent.isNotEmpty) {
+                            shareList.add(this.hexCodeList[position].colorName + " (" + this.hexCodeList[position].hexCode + ") w/ " +
+                                this.hexCodeList[position].pearlescent + " Pearlescent");
+                            print("ShareList: " + shareList.toString());
+                          }
+                          else {
+                            shareList.add(this.hexCodeList[position].colorName + " (" + this.hexCodeList[position].hexCode + ")");
+                            print("ShareList: " + shareList.toString());
+                          }
+                        }
+                        else {
+                          if (this.hexCodeList[position].pearlescent.isNotEmpty) {
+                            shareList.remove(this.hexCodeList[position].colorName + " (" + this.hexCodeList[position].hexCode + ") w/ " +
+                                this.hexCodeList[position].pearlescent + " Pearlescent");
+                            print("ShareList: " + shareList.toString());
+                          }
+                          else {
+                            shareList.remove(this.hexCodeList[position].colorName + " (" + this.hexCodeList[position].hexCode + ")");
+                            print("ShareList: " + shareList.toString());
+                          }
+                        }
                       });
                     },
                   ),
