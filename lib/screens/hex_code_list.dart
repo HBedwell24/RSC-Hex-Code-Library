@@ -52,16 +52,34 @@ class HexCodeState extends State<HexCodeList> {
           ),
           SpeedDialChild(
             child: Icon(Icons.share),
-            backgroundColor: Colors.blue,
+            backgroundColor: decideShareColor(),
             label: 'Share Hex Code(s)',
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () {
-              navigateToShareView(false);
+              decideShareClickAction();
             },
           ),
         ],
       ),
     );
+  }
+
+  Function decideShareClickAction() {
+    if (hexCodeList.length > 0) {
+      navigateToShareView(false);
+    }
+    else {
+      return null;
+    }
+  }
+
+  MaterialColor decideShareColor() {
+    if (hexCodeList.length > 0) {
+      return Colors.blue;
+    }
+    else {
+      return Colors.lightGreen;
+    }
   }
 
   // adapter for hex code list tile

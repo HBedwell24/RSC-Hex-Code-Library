@@ -64,8 +64,8 @@ class HexCodeState extends State<HexCodeShare> {
                   debugPrint('Share button clicked');
                   StringBuffer stringBuffer = new StringBuffer();
                   for (int i = 0; i < shareList.length; i++) {
-                    stringBuffer.write(shareList[i] + "\n" + "----------------------"
-                        "----------------------------------------------\n");
+                    int counter = i + 1;
+                    stringBuffer.write(counter.toString() + ". " + shareList[i] + "\n");
                   }
                   Share.share(stringBuffer.toString());
                 });
