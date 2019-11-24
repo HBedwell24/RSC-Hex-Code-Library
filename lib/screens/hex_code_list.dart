@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:rsc_hex_code_library/models/hex_code.dart';
 import 'package:rsc_hex_code_library/utils/database_helper.dart';
 import 'package:rsc_hex_code_library/screens/hex_code_detail.dart';
@@ -15,10 +14,28 @@ class HexCodeList extends StatefulWidget {
   }
 }
 
+List<HexCode> _searchResult = [];
+List<HexCode> _hexCodeDetails = [];
+
+onSearchTextChanged(String text) async {
+  _searchResult.clear();
+  if (text.isEmpty) {
+    //setState(() {});
+    return;
+  }
+  _hexCodeDetails.forEach((userDetail) {
+    if (userDetail.colorName.contains(text) || userDetail.hexCode.contains(text))
+      _searchResult.add(userDetail);
+  });
+  //setState(() {});
+}
+
 class HexCodeState extends State<HexCodeList> {
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<HexCode> hexCodeList;
   int count = 0;
+
+  TextEditingController controller = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,37 +47,94 @@ class HexCodeState extends State<HexCodeList> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Hex Codes'),
-      ),
-      body: getHexCodeListView(),
-      floatingActionButton: SpeedDial(
-        animatedIcon: AnimatedIcons.menu_close,
-        animatedIconTheme: IconThemeData(size: 22.0),
-        closeManually: false,
-        elevation: 8.0,
-        tooltip: 'Menu',
-        shape: CircleBorder(),
-        children: [
-          SpeedDialChild(
-              child: Icon(Icons.add),
-              backgroundColor: Colors.blue,
-              label: 'Add Hex Code',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () {
-                debugPrint('FAB clicked');
+        actions: <Widget>[
+          new IconButton(
+              icon: new Icon(Icons.add),
+              color: Colors.white,
+              tooltip: 'Add Hex Code',
+              onPressed: () {
                 navigateToDetailView(HexCode('', '', false), 'Add Hex Code', 'Submit', false);
-              }
-          ),
-          SpeedDialChild(
-            child: Icon(Icons.share),
-            backgroundColor: decideShareColor(),
-            label: 'Share Hex Code(s)',
-            labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () {
-              decideShareClickAction();
-            },
-          ),
+              }),
+          new IconButton(
+              icon: new Icon(Icons.share),
+              color: Colors.white,
+              tooltip: 'Share Hex Code(s)',
+              onPressed: () {
+                decideShareClickAction();
+              })
         ],
       ),
+      body: new Column(
+          children: <Widget>[
+            new Container(
+              color: Theme.of(context).primaryColorDark,
+              child: new Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new Card(
+                  child: new ListTile(
+                    leading: new Icon(Icons.search),
+                    title: new TextField(
+                      controller: controller,
+                      decoration: new InputDecoration(
+                          hintText: 'Search', border: InputBorder.none),
+                      onChanged: onSearchTextChanged,
+                    ),
+                    trailing: new IconButton(icon: new Icon(Icons.clear), onPressed: () {
+                      controller.clear();
+                      onSearchTextChanged('');
+                    },),
+                  ),
+                ),
+              ),
+            ),
+            new Expanded(
+            child: ListView.builder(
+              itemCount: count,
+              itemBuilder: (BuildContext context, int position) {
+                return Center(
+                  child: Card(
+                    color: Colors.white,
+                    elevation: 2.0,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          leading: Container(
+                          width: 42.0,
+                          height: 42.0,
+                          decoration: BoxDecoration(
+                          color: Color(
+                            convertHexCode(this.hexCodeList[position]
+                            .hexCode))),
+                          ),
+                          title: Text(this.hexCodeList[position].colorName),
+                          subtitle: decideSubtitle(context, position),
+                        ),
+                        ButtonTheme.bar(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              FlatButton(
+                                child: const Text('EDIT'),
+                                onPressed: () {
+                                navigateToDetailView(this.hexCodeList[position],
+                                  'Edit Hex Code', 'Update', true);},
+                              ),
+                              FlatButton(
+                                child: const Text('DELETE'),
+                                onPressed: () {
+                                  _showDialog(context, position);
+                                },
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );},
+            )
+            )]),
     );
   }
 
@@ -84,7 +158,6 @@ class HexCodeState extends State<HexCodeList> {
 
   // adapter for hex code list tile
   ListView getHexCodeListView() {
-    TextStyle titleStyle = Theme.of(context).textTheme.subhead;
 
     return ListView.builder(
       itemCount: count,
