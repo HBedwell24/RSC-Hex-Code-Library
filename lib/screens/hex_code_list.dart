@@ -27,10 +27,15 @@ class HexCodeState extends State<HexCodeList> {
 
   _onChanged(String value) {
     setState(() {
-      _newData = hexCodeList
-          .where((hexCode) => hexCode.colorName.toString().toLowerCase().contains(value.toLowerCase()))
-          .toList();
-      _newCount = _newData.length;
+      if (value.isEmpty) {
+        _newData.clear();
+      }
+      else {
+        _newData = hexCodeList
+            .where((hexCode) => hexCode.colorName.toString().toLowerCase().contains(value.toLowerCase()))
+            .toList();
+        _newCount = _newData.length;
+      }
     });
   }
 
@@ -226,13 +231,23 @@ class HexCodeState extends State<HexCodeList> {
   }
 
   Widget decideSubtitle(BuildContext context, int position) {
-    if (this.hexCodeList[position].pearlescent.isEmpty) {
+    if (decidePearlescent(context, position).isEmpty) {
       return Text(decideHexCode(context, position));
-    } else {
+    }
+    else {
       return Text(decideHexCode(context, position) +
           ' w/ ' +
-          this.hexCodeList[position].pearlescent +
+          decidePearlescent(context, position) +
           ' pearlescent');
+    }
+  }
+
+  decidePearlescent(BuildContext context, int position) {
+    if (_newData.length > 0) {
+      return _newData[position].pearlescent;
+    }
+    else {
+      return hexCodeList[position].pearlescent;
     }
   }
 
