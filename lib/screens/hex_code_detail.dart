@@ -101,7 +101,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                       else {
                         // loop through color string
                         for(int i = 0; i < color.length; i++) {
-                          // if color field contains numeric characters or a space, valid color name
+                          // if color field contains alpha characters or a space, valid color name
                           if(isAlpha(color[i]) || color[i].contains(' ')) {
                             return null;
                           }

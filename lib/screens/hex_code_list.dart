@@ -20,14 +20,12 @@ List<HexCode> _hexCodeDetails = [];
 onSearchTextChanged(String text) async {
   _searchResult.clear();
   if (text.isEmpty) {
-    //setState(() {});
     return;
   }
   _hexCodeDetails.forEach((userDetail) {
     if (userDetail.colorName.contains(text) || userDetail.hexCode.contains(text))
       _searchResult.add(userDetail);
   });
-  //setState(() {});
 }
 
 class HexCodeState extends State<HexCodeList> {
@@ -47,47 +45,53 @@ class HexCodeState extends State<HexCodeList> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Hex Codes'),
+        elevation: 0.0,
         actions: <Widget>[
           new IconButton(
-              icon: new Icon(Icons.add),
-              color: Colors.white,
-              tooltip: 'Add Hex Code',
-              onPressed: () {
-                navigateToDetailView(HexCode('', '', false), 'Add Hex Code', 'Submit', false);
-              }),
+            icon: new Icon(Icons.add),
+            color: Colors.white,
+            tooltip: 'Add Hex Code',
+            onPressed: () {
+              navigateToDetailView(HexCode('', '', false), 'Add Hex Code', 'Submit', false);
+            }
+          ),
           new IconButton(
-              icon: new Icon(Icons.share),
-              color: Colors.white,
-              tooltip: 'Share Hex Code(s)',
-              onPressed: () {
-                decideShareClickAction();
-              })
+            icon: new Icon(Icons.share),
+            color: Colors.white,
+            tooltip: 'Share Hex Code(s)',
+            onPressed: () {
+              decideShareClickAction();
+            }
+          )
         ],
       ),
       body: new Column(
-          children: <Widget>[
-            new Container(
-              color: Theme.of(context).primaryColorDark,
-              child: new Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: new Card(
-                  child: new ListTile(
-                    leading: new Icon(Icons.search),
-                    title: new TextField(
-                      controller: controller,
-                      decoration: new InputDecoration(
-                          hintText: 'Search', border: InputBorder.none),
-                      onChanged: onSearchTextChanged,
-                    ),
-                    trailing: new IconButton(icon: new Icon(Icons.clear), onPressed: () {
+        children: <Widget>[
+          new Container(
+            color: Theme.of(context).primaryColor,
+            child: new Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: new Card(
+                child: new ListTile(
+                  leading: new Icon(Icons.search),
+                  title: new TextField(
+                    controller: controller,
+                    decoration: new InputDecoration(
+                        hintText: 'Search', border: InputBorder.none),
+                    onChanged: onSearchTextChanged,
+                  ),
+                  trailing: new IconButton(
+                    icon: new Icon(Icons.clear),
+                    onPressed: () {
                       controller.clear();
                       onSearchTextChanged('');
-                    },),
+                    },
                   ),
                 ),
               ),
             ),
-            new Expanded(
+          ),
+          new Expanded(
             child: ListView.builder(
               itemCount: count,
               itemBuilder: (BuildContext context, int position) {
@@ -100,17 +104,33 @@ class HexCodeState extends State<HexCodeList> {
                       children: <Widget>[
                         ListTile(
                           leading: Container(
-                          width: 42.0,
-                          height: 42.0,
-                          decoration: BoxDecoration(
-                          color: Color(
-                            convertHexCode(this.hexCodeList[position]
-                            .hexCode))),
+                            width: 42.0,
+                            height: 42.0,
+                            decoration: BoxDecoration(
+                              color: Color(
+                                convertHexCode(this.hexCodeList[position].hexCode)
+                              )
+                            ),
+                          ),
+                          trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                IconButton(
+                                  icon: new Icon(Icons.edit),
+                                  tooltip: "Edit Hex Code",
+                                  onPressed: () => navigateToDetailView(this.hexCodeList[position], 'Edit Hex Code', 'Update', true),
+                                ),
+                                IconButton(
+                                  icon: new Icon(Icons.delete),
+                                  tooltip: "Delete Hex Code",
+                                  onPressed: () => _showDialog(context, position),
+                                ),
+                              ]
                           ),
                           title: Text(this.hexCodeList[position].colorName),
                           subtitle: decideSubtitle(context, position),
                         ),
-                        ButtonTheme.bar(
+                        /*ButtonTheme.bar(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
@@ -125,16 +145,19 @@ class HexCodeState extends State<HexCodeList> {
                                 onPressed: () {
                                   _showDialog(context, position);
                                 },
-                              )
+                              ),
                             ],
                           ),
-                        )
+                        ),*/
                       ],
                     ),
                   ),
-                );},
-            )
-            )]),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -174,9 +197,10 @@ class HexCodeState extends State<HexCodeList> {
                     width: 42.0,
                     height: 42.0,
                     decoration: BoxDecoration(
-                        color: Color(
-                            convertHexCode(this.hexCodeList[position]
-                                .hexCode))),
+                      color: Color(
+                        convertHexCode(this.hexCodeList[position].hexCode)
+                      )
+                    ),
                   ),
                   title: Text(
                     this.hexCodeList[position].colorName,
@@ -202,7 +226,7 @@ class HexCodeState extends State<HexCodeList> {
                       )
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
