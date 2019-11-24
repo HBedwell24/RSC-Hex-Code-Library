@@ -15,6 +15,7 @@ class HexCodeList extends StatefulWidget {
 }
 
 class HexCodeState extends State<HexCodeList> {
+
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<HexCode> hexCodeList;
   int count = 0;
@@ -30,7 +31,6 @@ class HexCodeState extends State<HexCodeList> {
           .where((hexCode) => hexCode.colorName.toString().toLowerCase().contains(value.toLowerCase()))
           .toList();
       _newCount = _newData.length;
-      print(_newData);
     });
   }
 
@@ -116,7 +116,7 @@ class HexCodeState extends State<HexCodeList> {
                                 IconButton(
                                   icon: new Icon(Icons.edit),
                                   tooltip: "Edit Hex Code",
-                                  onPressed: () => navigateToDetailView(this.hexCodeList[position], 'Edit Hex Code', 'Update', true),
+                                  onPressed: () => navigateToDetailView(decidePosition(context, position), 'Edit Hex Code', 'Update', true),
                                 ),
                                 IconButton(
                                   icon: new Icon(Icons.delete),
@@ -146,6 +146,15 @@ class HexCodeState extends State<HexCodeList> {
     }
     else {
       return count;
+    }
+  }
+
+  decidePosition(BuildContext context, int position) {
+    if (_newData.length > 0) {
+      return this._newData[position];
+    }
+    else {
+      return this.hexCodeList[position];
     }
   }
 
@@ -194,7 +203,7 @@ class HexCodeState extends State<HexCodeList> {
         return AlertDialog(
           title:
               new Text("Are you sure you want to delete the following item? This action cannot be undone."),
-          content: new Text(this.hexCodeList[position].colorName + "(" + this.hexCodeList[position].colorName + ")"),
+          content: new Text(decideColorName(context, position) + " (" + decideHexCode(context, position) + ")"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
@@ -206,7 +215,7 @@ class HexCodeState extends State<HexCodeList> {
             new FlatButton(
               child: new Text("YES"),
               onPressed: () {
-                _delete(context, hexCodeList[position]);
+                _delete(context, decidePosition(context, position));
                 Navigator.of(context).pop();
               },
             ),
