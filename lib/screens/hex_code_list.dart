@@ -14,26 +14,25 @@ class HexCodeList extends StatefulWidget {
   }
 }
 
-List<HexCode> _searchResult = [];
-List<HexCode> _hexCodeDetails = [];
-
-onSearchTextChanged(String text) async {
-  _searchResult.clear();
-  if (text.isEmpty) {
-    return;
-  }
-  _hexCodeDetails.forEach((userDetail) {
-    if (userDetail.colorName.contains(text) || userDetail.hexCode.contains(text))
-      _searchResult.add(userDetail);
-  });
-}
-
 class HexCodeState extends State<HexCodeList> {
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<HexCode> hexCodeList;
   int count = 0;
 
   TextEditingController controller = new TextEditingController();
+
+  List<HexCode> _newData = [];
+  int _newCount;
+
+  _onChanged(String value) {
+    setState(() {
+      _newData = hexCodeList
+          .where((hexCode) => hexCode.colorName.toString().toLowerCase().contains(value.toLowerCase()))
+          .toList();
+      _newCount = _newData.length;
+      print(_newData);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,13 +77,12 @@ class HexCodeState extends State<HexCodeList> {
                     controller: controller,
                     decoration: new InputDecoration(
                         hintText: 'Search', border: InputBorder.none),
-                    onChanged: onSearchTextChanged,
+                    onChanged: _onChanged,
                   ),
                   trailing: new IconButton(
                     icon: new Icon(Icons.clear),
                     onPressed: () {
                       controller.clear();
-                      onSearchTextChanged('');
                     },
                   ),
                 ),
@@ -93,7 +91,7 @@ class HexCodeState extends State<HexCodeList> {
           ),
           new Expanded(
             child: ListView.builder(
-              itemCount: count,
+              itemCount: decideCount(),
               itemBuilder: (BuildContext context, int position) {
                 return Center(
                   child: Card(
@@ -108,7 +106,7 @@ class HexCodeState extends State<HexCodeList> {
                             height: 42.0,
                             decoration: BoxDecoration(
                               color: Color(
-                                convertHexCode(this.hexCodeList[position].hexCode)
+                                convertHexCode(decideHexCode(context, position))
                               )
                             ),
                           ),
@@ -127,28 +125,9 @@ class HexCodeState extends State<HexCodeList> {
                                 ),
                               ]
                           ),
-                          title: Text(this.hexCodeList[position].colorName),
+                          title: Text(decideColorName(context, position)),
                           subtitle: decideSubtitle(context, position),
                         ),
-                        /*ButtonTheme.bar(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              FlatButton(
-                                child: const Text('EDIT'),
-                                onPressed: () {
-                                navigateToDetailView(this.hexCodeList[position],
-                                  'Edit Hex Code', 'Update', true);},
-                              ),
-                              FlatButton(
-                                child: const Text('DELETE'),
-                                onPressed: () {
-                                  _showDialog(context, position);
-                                },
-                              ),
-                            ],
-                          ),
-                        ),*/
                       ],
                     ),
                   ),
@@ -161,7 +140,34 @@ class HexCodeState extends State<HexCodeList> {
     );
   }
 
-  Function decideShareClickAction() {
+  int decideCount() {
+    if (_newData.length > 0) {
+      return _newCount;
+    }
+    else {
+      return count;
+    }
+  }
+
+  decideColorName(BuildContext context, int position) {
+    if (_newData.length > 0) {
+      return _newData[position].colorName;
+    }
+    else {
+      return hexCodeList[position].colorName;
+    }
+  }
+
+  decideHexCode(BuildContext context, int position) {
+    if (_newData.length > 0) {
+      return _newData[position].hexCode;
+    }
+    else {
+      return hexCodeList[position].hexCode;
+    }
+  }
+
+  decideShareClickAction() {
     if (hexCodeList.length > 0) {
       navigateToShareView(false);
     }
@@ -179,62 +185,6 @@ class HexCodeState extends State<HexCodeList> {
     }
   }
 
-  // adapter for hex code list tile
-  ListView getHexCodeListView() {
-
-    return ListView.builder(
-      itemCount: count,
-      itemBuilder: (BuildContext context, int position) {
-        return Center(
-          child: Card(
-            color: Colors.white,
-            elevation: 2.0,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ListTile(
-                  leading: Container(
-                    width: 42.0,
-                    height: 42.0,
-                    decoration: BoxDecoration(
-                      color: Color(
-                        convertHexCode(this.hexCodeList[position].hexCode)
-                      )
-                    ),
-                  ),
-                  title: Text(
-                    this.hexCodeList[position].colorName,
-                  ),
-                  subtitle: decideSubtitle(context, position),
-                ),
-                ButtonTheme.bar(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      FlatButton(
-                        child: const Text('EDIT'),
-                        onPressed: () {
-                          navigateToDetailView(this.hexCodeList[position],
-                              'Edit Hex Code', 'Update', true);
-                        },
-                      ),
-                      FlatButton(
-                        child: const Text('DELETE'),
-                        onPressed: () {
-                          _showDialog(context, position);
-                        },
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   void _showDialog(BuildContext context, int position) {
     // flutter defined function
     showDialog(
@@ -243,8 +193,8 @@ class HexCodeState extends State<HexCodeList> {
         // return object of type Dialog
         return AlertDialog(
           title:
-              new Text("Are you sure you want to delete the following item?"),
-          content: new Text("This action cannot be undone."),
+              new Text("Are you sure you want to delete the following item? This action cannot be undone."),
+          content: new Text(this.hexCodeList[position].colorName + "(" + this.hexCodeList[position].colorName + ")"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
@@ -268,9 +218,9 @@ class HexCodeState extends State<HexCodeList> {
 
   Widget decideSubtitle(BuildContext context, int position) {
     if (this.hexCodeList[position].pearlescent.isEmpty) {
-      return Text(this.hexCodeList[position].hexCode);
+      return Text(decideHexCode(context, position));
     } else {
-      return Text(this.hexCodeList[position].hexCode +
+      return Text(decideHexCode(context, position) +
           ' w/ ' +
           this.hexCodeList[position].pearlescent +
           ' pearlescent');

@@ -270,8 +270,8 @@ class HexCodeDetailState extends State<HexCodeDetail> {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text("Are you sure you want to delete the following item?"),
-          content: new Text("This action cannot be undone."),
+          title: new Text("Are you sure you want to delete the following item? This action cannot be undone."),
+          content: new Text(this.hexCode.colorName.toString()),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
