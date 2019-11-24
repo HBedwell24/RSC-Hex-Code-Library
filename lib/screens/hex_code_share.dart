@@ -8,14 +8,9 @@ import 'package:sqflite/sqflite.dart';
 List<String> shareList = List<String>();
 
 class HexCodeShare extends StatefulWidget {
-
-  final bool checkBoxSelected;
-
-  HexCodeShare(this.checkBoxSelected);
-
   @override
   State<StatefulWidget> createState() {
-    return HexCodeState(this.checkBoxSelected);
+    return HexCodeState();
   }
 }
 
@@ -23,9 +18,6 @@ class HexCodeState extends State<HexCodeShare> {
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<HexCode> hexCodeList;
   int count = 0;
-  bool checkBoxSelected;
-
-  HexCodeState(this.checkBoxSelected);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +34,8 @@ class HexCodeState extends State<HexCodeShare> {
         appBar: AppBar(
           title: Text('Share Hex Code(s)'),
         ),
-        body: getHexCodeListView(),
+        body: /*initSelectAllCard(),*/
+        getHexCodeListView(),
         bottomNavigationBar: Padding(
           padding: EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 0.0),
           child: Visibility(
@@ -77,8 +70,8 @@ class HexCodeState extends State<HexCodeShare> {
     );
   }
 
+  // adapter for hex code list view
   ListView getHexCodeListView() {
-
     return ListView.builder(
       itemCount: count,
       itemBuilder: (BuildContext context, int position) {
@@ -111,7 +104,7 @@ class HexCodeState extends State<HexCodeShare> {
                         if (this.hexCodeList[position].isSelected == true) {
                           if (this.hexCodeList[position].pearlescent.isNotEmpty) {
                             shareList.add(this.hexCodeList[position].colorName + " (" + this.hexCodeList[position].hexCode + ") w/ " +
-                              this.hexCodeList[position].pearlescent + " Pearlescent");
+                                this.hexCodeList[position].pearlescent + " Pearlescent");
                             print("ShareList: " + shareList.toString());
                           }
                           else {
@@ -122,7 +115,7 @@ class HexCodeState extends State<HexCodeShare> {
                         else {
                           if (this.hexCodeList[position].pearlescent.isNotEmpty) {
                             shareList.remove(this.hexCodeList[position].colorName + " (" + this.hexCodeList[position].hexCode + ") w/ " +
-                              this.hexCodeList[position].pearlescent + " Pearlescent");
+                                this.hexCodeList[position].pearlescent + " Pearlescent");
                             print("ShareList: " + shareList.toString());
                           }
                           else {
@@ -142,11 +135,54 @@ class HexCodeState extends State<HexCodeShare> {
     );
   }
 
+  // TODO: integrate Select All card with list view builder
+  Card initSelectAllCard() {
+    bool isSelected = false;
+    return Card(
+      color: Colors.white,
+      elevation: 2.0,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          CheckboxListTile(
+            title: Text(
+              "Select All" + " (" + (hexCodeList.length).toString() + ")",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            value: isSelected,
+            onChanged: (bool value) {
+              setState(() {
+                isSelected = value;
+
+                // if select all checkbox is enabled, check all items
+                if(isSelected == true) {
+                  for(int i = 0; i < hexCodeList.length; i++) {
+                    hexCodeList[i].isSelected = true;
+                  }
+                }
+                // if select all checkbox is disabled, uncheck all items
+                else {
+                  for(int i = 0; i < hexCodeList.length; i++) {
+                    hexCodeList[i].isSelected = false;
+                  }
+                }
+              });
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  // up navigation to parent screen
   void moveToLastScreen() {
     shareList.clear();
     Navigator.pop(context, true);
   }
 
+  // decides contents of subtitle based on presence of optional parameters
   Widget decideSubtitle(BuildContext context, int position) {
     if (this.hexCodeList[position].pearlescent.isEmpty) {
       return Text(this.hexCodeList[position].hexCode);
@@ -158,6 +194,7 @@ class HexCodeState extends State<HexCodeShare> {
     }
   }
 
+  // converts a string to hexadecimal format
   int convertHexCode(String hexCode) {
     hexCode = hexCode.toUpperCase().replaceAll("#", "");
     if (hexCode.length == 6) {
@@ -166,6 +203,7 @@ class HexCodeState extends State<HexCodeShare> {
     return int.parse(hexCode, radix: 16);
   }
 
+  // updates list view content
   void updateListView() {
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database) {

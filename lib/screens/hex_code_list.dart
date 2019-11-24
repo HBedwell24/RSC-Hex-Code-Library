@@ -181,9 +181,9 @@ class HexCodeState extends State<HexCodeList> {
     }
   }
 
-  decideShareClickAction() {
+  void decideShareClickAction() {
     if (hexCodeList.length > 0) {
-      navigateToShareView(false);
+      navigateToShareView();
     }
     else {
       return null;
@@ -236,9 +236,9 @@ class HexCodeState extends State<HexCodeList> {
     }
     else {
       return Text(decideHexCode(context, position) +
-          ' w/ ' +
-          decidePearlescent(context, position) +
-          ' pearlescent');
+        ' w/ ' +
+        this.hexCodeList[position].pearlescent +
+        ' pearlescent');
     }
   }
 
@@ -262,14 +262,8 @@ class HexCodeState extends State<HexCodeList> {
   void _delete(BuildContext context, HexCode hexCode) async {
     int result = await databaseHelper.deleteHexCode(hexCode.id);
     if (result != 0) {
-      //_showSnackBar(context, 'Hex Code Deleted Successfully!');
       updateListView();
     }
-  }
-
-  void _showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(content: Text(message));
-    Scaffold.of(context).showSnackBar(snackBar);
   }
 
   void navigateToDetailView(HexCode hexCode, String title,
@@ -283,9 +277,9 @@ class HexCodeState extends State<HexCodeList> {
     }
   }
 
-  void navigateToShareView(bool checkBoxSelected) async {
+  void navigateToShareView() async {
     bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return HexCodeShare(checkBoxSelected);
+      return HexCodeShare();
     }));
 
     if (result == true) {
