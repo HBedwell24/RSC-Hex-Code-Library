@@ -18,6 +18,7 @@ class HexCodeState extends State<HexCodeShare> {
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<HexCode> hexCodeList;
   int count = 0;
+  bool isSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class HexCodeState extends State<HexCodeShare> {
             children: <Widget>[
               getSelectAllCard(),
               SizedBox(
-                height: 539,
+                height: 491,
                 child: getHexCodeListView(),
               ),
             ],
@@ -83,7 +84,6 @@ class HexCodeState extends State<HexCodeShare> {
   // adapter for hex code list view
   ListView getHexCodeListView() {
     return ListView.builder(
-      shrinkWrap: true,
       itemCount: count,
       itemBuilder: (BuildContext context, int position) {
         return Center(
@@ -145,9 +145,8 @@ class HexCodeState extends State<HexCodeShare> {
       },
     );
   }
-  
+
   Card getSelectAllCard() {
-    bool isSelected = false;
     return Card(
       color: Colors.white,
       elevation: 2.0,
@@ -162,7 +161,7 @@ class HexCodeState extends State<HexCodeShare> {
               ),
             ),
             trailing: Checkbox(
-              value: isSelected == true,
+              value: isSelected,
               onChanged: (bool value) {
                 setState(() {
                   isSelected = value;
@@ -171,12 +170,25 @@ class HexCodeState extends State<HexCodeShare> {
                   if(isSelected == true) {
                     for(int i = 0; i < hexCodeList.length; i++) {
                       hexCodeList[i].isSelected = true;
+
+                      if (this.hexCodeList[i].pearlescent.isNotEmpty) {
+                        shareList.add(this.hexCodeList[i].colorName + " (" + this.hexCodeList[i].hexCode + ") w/ " +
+                            this.hexCodeList[i].pearlescent + " Pearlescent");
+                        print("ShareList: " + shareList.toString());
+                      }
+                      else {
+                        shareList.add(this.hexCodeList[i].colorName + " (" + this.hexCodeList[i].hexCode + ")");
+                        print("ShareList: " + shareList.toString());
+                      }
                     }
                   }
                   // if select all checkbox is disabled, uncheck all items
                   else {
                     for(int i = 0; i < hexCodeList.length; i++) {
                       hexCodeList[i].isSelected = false;
+
+                      shareList.clear();
+                      print("ShareList: " + shareList.toString());
                     }
                   }
                 });
