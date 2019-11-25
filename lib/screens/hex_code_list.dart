@@ -261,6 +261,7 @@ class HexCodeState extends State<HexCodeList> {
 
   void _delete(BuildContext context, HexCode hexCode) async {
     int result = await databaseHelper.deleteHexCode(hexCode.id);
+    _newData.remove(hexCode);
     if (result != 0) {
       updateListView();
     }
@@ -295,6 +296,9 @@ class HexCodeState extends State<HexCodeList> {
         setState(() {
           this.hexCodeList = hexCodeList;
           this.count = hexCodeList.length;
+
+          this._newData = _newData;
+          this._newCount = _newData.length;
         });
       });
     });
