@@ -49,13 +49,14 @@ class HexCodeState extends State<HexCodeList> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Hex Codes'),
-        elevation: 0.0,
         actions: <Widget>[
           new IconButton(
             icon: new Icon(Icons.add),
             color: Colors.white,
             tooltip: 'Add Hex Code',
             onPressed: () {
+              _newData.clear();
+              controller.clear();
               navigateToDetailView(HexCode('', '', false), 'Add Hex Code', 'Submit', false);
             }
           ),
