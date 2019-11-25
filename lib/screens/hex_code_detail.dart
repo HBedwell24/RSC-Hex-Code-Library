@@ -31,7 +31,8 @@ class HexCodeDetailState extends State<HexCodeDetail> {
     'Chocolate Brown', 'Bison Brown', 'Creek Brown', 'Feltzer Brown', 'Maple Brown', 'Beechwood Brown',
     'Sienna Brown', 'Saddle Brown', 'Moss Brown', 'Woodbeech Brown', 'Straw Brown', 'Sandy Brown',
     'Bleached Brown', 'Schafter Purple', 'Spinnaker Purple', 'Midnight Purple', 'Bright Purple',
-    'Cream', 'Ice White', 'Frost White'
+    'Cream', 'Ice White', 'Frost White', 'Worn Blue Silver', 'Worn Golden Red', 'Worn Shadow Silver',
+    'Worn Green', 'Worn Sea Wash', 'Worn Baby Blue', 'Util Silver', 'MP100'
     ];
 
   DatabaseHelper helper = DatabaseHelper();
