@@ -169,16 +169,18 @@ class HexCodeState extends State<HexCodeShare> {
                   // if select all checkbox is enabled, check all items
                   if(isSelected == true) {
                     for(int i = 0; i < hexCodeList.length; i++) {
-                      hexCodeList[i].isSelected = true;
+                      if(hexCodeList[i].isSelected == false) {
+                        hexCodeList[i].isSelected = true;
 
-                      if (this.hexCodeList[i].pearlescent.isNotEmpty) {
-                        shareList.add(this.hexCodeList[i].colorName + " (" + this.hexCodeList[i].hexCode + ") w/ " +
-                            this.hexCodeList[i].pearlescent + " Pearlescent");
-                        print("ShareList: " + shareList.toString());
-                      }
-                      else {
-                        shareList.add(this.hexCodeList[i].colorName + " (" + this.hexCodeList[i].hexCode + ")");
-                        print("ShareList: " + shareList.toString());
+                        if(this.hexCodeList[i].pearlescent.isNotEmpty) {
+                          shareList.add(this.hexCodeList[i].colorName + " (" + this.hexCodeList[i].hexCode + ") w/ " +
+                              this.hexCodeList[i].pearlescent + " Pearlescent");
+                          print("ShareList: " + shareList.toString());
+                        }
+                        else {
+                          shareList.add(this.hexCodeList[i].colorName + " (" + this.hexCodeList[i].hexCode + ")");
+                          print("ShareList: " + shareList.toString());
+                        }
                       }
                     }
                   }

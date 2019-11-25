@@ -4,7 +4,7 @@ class HexCode {
   String _colorName;
   String _hexCode;
   String _pearlescent;
-  bool _checkBoxSelected;
+  bool _checkBoxSelected = false;
 
   // HexCode constructor without id
   HexCode(this._colorName, this._pearlescent, this._checkBoxSelected, [this._hexCode]);
