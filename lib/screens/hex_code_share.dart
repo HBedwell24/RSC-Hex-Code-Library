@@ -34,8 +34,18 @@ class HexCodeState extends State<HexCodeShare> {
         appBar: AppBar(
           title: Text('Share Hex Code(s)'),
         ),
-        body: /*initSelectAllCard(),*/
-        getHexCodeListView(),
+        body: Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              getSelectAllCard(),
+              SizedBox(
+                height: 539,
+                child: getHexCodeListView(),
+              ),
+            ],
+          ),
+        ),
         bottomNavigationBar: Padding(
           padding: EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 0.0),
           child: Visibility(
@@ -73,6 +83,7 @@ class HexCodeState extends State<HexCodeShare> {
   // adapter for hex code list view
   ListView getHexCodeListView() {
     return ListView.builder(
+      shrinkWrap: true,
       itemCount: count,
       itemBuilder: (BuildContext context, int position) {
         return Center(
@@ -134,9 +145,8 @@ class HexCodeState extends State<HexCodeShare> {
       },
     );
   }
-
-  // TODO: integrate Select All card with list view builder
-  Card initSelectAllCard() {
+  
+  Card getSelectAllCard() {
     bool isSelected = false;
     return Card(
       color: Colors.white,
@@ -144,32 +154,34 @@ class HexCodeState extends State<HexCodeShare> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          CheckboxListTile(
+          ListTile(
             title: Text(
               "Select All" + " (" + (hexCodeList.length).toString() + ")",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            value: isSelected,
-            onChanged: (bool value) {
-              setState(() {
-                isSelected = value;
+            trailing: Checkbox(
+              value: isSelected == true,
+              onChanged: (bool value) {
+                setState(() {
+                  isSelected = value;
 
-                // if select all checkbox is enabled, check all items
-                if(isSelected == true) {
-                  for(int i = 0; i < hexCodeList.length; i++) {
-                    hexCodeList[i].isSelected = true;
+                  // if select all checkbox is enabled, check all items
+                  if(isSelected == true) {
+                    for(int i = 0; i < hexCodeList.length; i++) {
+                      hexCodeList[i].isSelected = true;
+                    }
                   }
-                }
-                // if select all checkbox is disabled, uncheck all items
-                else {
-                  for(int i = 0; i < hexCodeList.length; i++) {
-                    hexCodeList[i].isSelected = false;
+                  // if select all checkbox is disabled, uncheck all items
+                  else {
+                    for(int i = 0; i < hexCodeList.length; i++) {
+                      hexCodeList[i].isSelected = false;
+                    }
                   }
-                }
-              });
-            },
+                });
+              },
+            ),
           ),
         ],
       ),
