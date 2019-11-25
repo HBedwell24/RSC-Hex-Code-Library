@@ -40,10 +40,9 @@ class HexCodeState extends State<HexCodeShare> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               getSelectAllCard(),
-              SizedBox(
-                height: 491,
+              Expanded(
                 child: getHexCodeListView(),
-              ),
+              )
             ],
           ),
         ),
@@ -84,6 +83,7 @@ class HexCodeState extends State<HexCodeShare> {
   // adapter for hex code list view
   ListView getHexCodeListView() {
     return ListView.builder(
+      shrinkWrap: true,
       itemCount: count,
       itemBuilder: (BuildContext context, int position) {
         return Center(
