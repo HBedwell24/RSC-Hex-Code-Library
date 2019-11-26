@@ -121,7 +121,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                       updateColorName();
                     },
                     decoration: InputDecoration(
-                      labelText: 'Color*',
+                      labelText: 'Color Name*',
                       labelStyle: textStyle,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0)

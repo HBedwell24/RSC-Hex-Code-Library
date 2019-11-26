@@ -4,20 +4,20 @@ class HexCode {
   String _colorName;
   String _hexCode;
   String _pearlescent;
-  bool _checkBoxSelected = false;
+  bool _isSelected = false;
 
   // HexCode constructor without id
-  HexCode(this._colorName, this._pearlescent, this._checkBoxSelected, [this._hexCode]);
+  HexCode(this._colorName, this._pearlescent, this._isSelected, [this._hexCode]);
 
   // HexCode constructor with id
-  HexCode.withId(this._id, this._colorName, this._pearlescent, this._checkBoxSelected, [this._hexCode]);
+  HexCode.withId(this._id, this._colorName, this._pearlescent, this._isSelected, [this._hexCode]);
 
   // getters for member variables
   int get id => _id;
   String get colorName => _colorName;
   String get hexCode => _hexCode;
   String get pearlescent => _pearlescent;
-  bool get isSelected => _checkBoxSelected;
+  bool get isSelected => _isSelected;
 
   // setter for color name
   set colorName(String newColorName) {
@@ -42,7 +42,7 @@ class HexCode {
 
   // setter for check box selection state
   set isSelected(bool isSelected) {
-    this._checkBoxSelected = isSelected;
+    this._isSelected = isSelected;
   }
 
   Map<String, dynamic> convertToMap() {
