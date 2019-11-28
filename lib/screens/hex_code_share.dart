@@ -47,7 +47,7 @@ class HexCodeState extends State<HexCodeShare> {
           ),
         ),
         bottomNavigationBar: Padding(
-          padding: EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 4.0),
+          padding: EdgeInsets.fromLTRB(4.0, 4.0, 4.0, 4.0),
           child: Visibility(
             visible: shareList.length > 0 ? true : false,
             child: RaisedButton(

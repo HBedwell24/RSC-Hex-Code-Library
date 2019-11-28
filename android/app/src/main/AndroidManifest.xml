@@ -8,7 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="rsc_hex_code_library"
+        android:label="RSC Hex Code Library"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
