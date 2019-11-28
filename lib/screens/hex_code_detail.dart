@@ -100,19 +100,15 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                       }
                       // if color field is not empty
                       else {
-                        // loop through color string
-                        for(int i = 0; i < color.length; i++) {
-                          // if color field contains alpha characters or a space, valid color name
-                          if(isAlpha(color[i]) || color[i].contains(' ')) {
-                            return null;
-                          }
-                          // if color field contains non-numeric characters, prompt error
-                          else {
-                            return "Non-alphanumeric characters were found in field 'Color'.";
-                          }
+                        final regex = RegExp(r"^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$");
+                        // check entered color name against a regex for spaces, numbers, or letters
+                        if(!(regex.hasMatch(color))) {
+                          return "Invalid characters were found in field 'Color'.";
+                        }
+                        else {
+                          return null;
                         }
                       }
-                      return null;
                     },
                     controller: colorNameController,
                     style: textStyle,
