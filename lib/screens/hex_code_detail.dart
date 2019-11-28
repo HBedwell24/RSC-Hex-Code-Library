@@ -123,6 +123,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                     decoration: InputDecoration(
                       labelText: 'Color Name*',
                       labelStyle: textStyle,
+                      fillColor: Colors.white,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5.0)
                       ),
@@ -159,6 +160,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                     decoration: InputDecoration(
                       labelText: 'Hex Code*',
                       labelStyle: textStyle,
+                      fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0)
                       ),
@@ -172,6 +174,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                     builder: (FormFieldState<String> state) {
                       return InputDecorator(
                         decoration: InputDecoration(
+                          fillColor: Colors.white,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0)
                           ),
@@ -201,22 +204,25 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                  padding: EdgeInsets.only(top: 30.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Flexible(
+                      Expanded(
                         child: RaisedButton(
-                          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+                          padding: EdgeInsets.only(top: 15, bottom: 15),
                           color: Theme
                             .of(context)
-                            .primaryColorDark,
-                          textColor: Theme
-                            .of(context)
-                            .primaryColorLight,
+                            .primaryColor,
+                          textColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(5.0),
+                          ),
                           child: Text(
                             buttonText.toUpperCase(),
-                            style: new TextStyle(fontWeight: FontWeight.bold),
+                            style: new TextStyle(
+                              fontSize: 18,
+                            ),
                           ),
                           onPressed: () {
                             setState(() {
@@ -228,31 +234,6 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                           },
                         ),
                       ),
-                      Container(
-                        width: 10.0,
-                      ),
-                      Flexible(
-                        child: Visibility(
-                          visible: isDisabled ? true : false,
-                          child: RaisedButton(
-                            padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
-                            color: Colors.black,
-                            textColor: Theme
-                              .of(context)
-                              .primaryColorLight,
-                            child: Text(
-                              'Delete'.toUpperCase(),
-                              style: new TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                debugPrint('Delete button clicked');
-                                _showDialog(context);
-                              });
-                            },
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -261,36 +242,6 @@ class HexCodeDetailState extends State<HexCodeDetail> {
           ),
         ),
       ),
-    );
-  }
-
-  void _showDialog(BuildContext context) {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text("Are you sure you want to delete the following item? This action cannot be undone."),
-          content: new Text(this.hexCode.colorName.toString()),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("NO"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            new FlatButton(
-              child: new Text("YES"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _delete();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 

@@ -47,20 +47,23 @@ class HexCodeState extends State<HexCodeShare> {
           ),
         ),
         bottomNavigationBar: Padding(
-          padding: EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 0.0),
+          padding: EdgeInsets.fromLTRB(4.0, 0.0, 4.0, 4.0),
           child: Visibility(
             visible: shareList.length > 0 ? true : false,
             child: RaisedButton(
-              padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+              padding: EdgeInsets.only(top: 15, bottom: 15),
               color: Theme
-                .of(context)
-                .primaryColorDark,
-              textColor: Theme
-                .of(context)
-                .primaryColorLight,
+                  .of(context)
+                  .primaryColor,
+              textColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(5.0),
+              ),
               child: Text(
                 'Share'.toUpperCase(),
-                style: new TextStyle(fontWeight: FontWeight.bold),
+                style: new TextStyle(
+                  fontSize: 16,
+                ),
               ),
               onPressed: () {
                 setState(() {
@@ -98,6 +101,7 @@ class HexCodeState extends State<HexCodeShare> {
                     width: 42.0,
                     height: 42.0,
                     decoration: BoxDecoration(
+                      shape: BoxShape.circle,
                       color: Color(
                         convertHexCode(this.hexCodeList[position].hexCode)
                       )

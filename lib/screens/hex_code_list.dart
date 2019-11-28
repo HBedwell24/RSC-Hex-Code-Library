@@ -111,6 +111,7 @@ class HexCodeState extends State<HexCodeList> {
                             width: 42.0,
                             height: 42.0,
                             decoration: BoxDecoration(
+                              shape: BoxShape.circle,
                               color: Color(
                                 convertHexCode(decideHexCode(context, position))
                               )
