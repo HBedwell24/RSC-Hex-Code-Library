@@ -96,14 +96,14 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                     validator: (color) {
                       // if color field is empty, prompt error
                       if (color.isEmpty) {
-                        return "Field 'Color' is empty.";
+                        return "Field 'Color Name' is empty.";
                       }
                       // if color field is not empty
                       else {
                         final regex = RegExp(r"^[A-Za-z0-9 _]*[A-Za-z0-9][A-Za-z0-9 _]*$");
                         // check entered color name against a regex for spaces, numbers, or letters
                         if(!(regex.hasMatch(color))) {
-                          return "Invalid characters were found in field 'Color'.";
+                          return "Invalid characters were found in field 'Color Name'.";
                         }
                         else {
                           return null;
@@ -113,7 +113,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                     controller: colorNameController,
                     style: textStyle,
                     onChanged: (value) {
-                      debugPrint("Something changed in 'Color' text field.");
+                      debugPrint("Something changed in 'Color Name' text field.");
                       updateColorName();
                     },
                     decoration: InputDecoration(
