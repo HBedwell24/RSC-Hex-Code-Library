@@ -176,10 +176,20 @@ class HexCodeState extends State<HexCodeList> {
 
   decideHexCode(BuildContext context, int position) {
     if (_newData.length > 0) {
-      return _newData[position].hexCode;
+      if (_newData[position].hexCode[0].contains('#')) {
+        return _newData[position].hexCode;
+      }
+      else {
+        return '#' + _newData[position].hexCode;
+      }
     }
     else {
-      return hexCodeList[position].hexCode;
+      if (hexCodeList[position].hexCode[0].contains('#')) {
+        return hexCodeList[position].hexCode;
+      }
+      else {
+        return '#' + hexCodeList[position].hexCode;
+      }
     }
   }
 

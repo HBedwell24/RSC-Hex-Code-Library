@@ -32,7 +32,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'hexCode9.db';
+    String path = directory.path + 'hexCode12.db';
 
     var notesDatabase = await openDatabase(path, version: 1, onCreate: _createDb);
     return notesDatabase;
