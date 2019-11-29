@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:rsc_hex_code_library/models/category.dart';
+import 'package:rsc_hex_code_library/screens/hex_code/hex_code_list.dart';
 import 'package:rsc_hex_code_library/utils/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -55,19 +56,19 @@ class CategoryState extends State<CategoryList> {
                       children: <Widget>[
                         ListTile(
                           trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                IconButton(
-                                  icon: new Icon(Icons.edit),
-                                  tooltip: "Edit Category",
-                                  onPressed: () => navigateToCategoryDetailView(categoryList[position], 'Edit Category', 'Update', true),
-                                ),
-                                IconButton(
-                                  icon: new Icon(Icons.delete),
-                                  tooltip: "Delete Category",
-                                  onPressed: () => _showDialog(context, position),
-                                ),
-                              ]
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              IconButton(
+                                icon: new Icon(Icons.edit),
+                                tooltip: "Edit Category",
+                                onPressed: () => navigateToCategoryDetailView(categoryList[position], 'Edit Category', 'Update', true),
+                              ),
+                              IconButton(
+                                icon: new Icon(Icons.delete),
+                                tooltip: "Delete Category",
+                                onPressed: () => _showDialog(context, position),
+                              ),
+                            ]
                           ),
                           title: Text(categoryList[position].name + " (" + decideRecordsLength(position) + ")"),
                         ),
@@ -128,6 +129,12 @@ class CategoryState extends State<CategoryList> {
     if (result != 0) {
       updateListView();
     }
+  }
+
+  void navigateToHexCodeListView(Category category) async {
+    bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return HexCodeList(category);
+    }));
   }
 
   void navigateToCategoryDetailView(Category category, String title, String buttonText, bool isDisabled) async {

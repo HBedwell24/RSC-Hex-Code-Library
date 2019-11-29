@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:rsc_hex_code_library/models/category.dart';
 import 'package:rsc_hex_code_library/models/hex_code.dart';
 import 'package:rsc_hex_code_library/utils/database_helper.dart';
 import 'package:rsc_hex_code_library/screens/hex_code/hex_code_detail.dart';
@@ -8,9 +9,13 @@ import 'package:sqflite/sqflite.dart';
 import 'hex_code_share.dart';
 
 class HexCodeList extends StatefulWidget {
+  final Category category;
+
+  HexCodeList(this.category);
+
   @override
   State<StatefulWidget> createState() {
-    return HexCodeState();
+    return HexCodeState(this.category);
   }
 }
 
@@ -21,9 +26,12 @@ class HexCodeState extends State<HexCodeList> {
   int count = 0;
 
   TextEditingController controller = new TextEditingController();
+  Category category;
 
   List<HexCode> _newData = [];
   int _newCount;
+
+  HexCodeState(this.category);
 
   _onChanged(String value) {
     setState(() {
