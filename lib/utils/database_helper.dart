@@ -43,7 +43,7 @@ class DatabaseHelper {
   }
 
   void _createDb(Database db, int newVersion) async {
-    await db.execute('CREATE TABLE $hexCodeTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colColorName TEXT, $colHexCode TEXT, $colPearlescent TEXT, $colCategoryName TEXT, FOREIGN KEY(colCategoryName) REFERENCES hexCodeTable(colCategoryName))');
+    await db.execute('CREATE TABLE $hexCodeTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colColorName TEXT, $colHexCode TEXT, $colPearlescent TEXT, $colCategoryName TEXT, FOREIGN KEY($colCategoryName) REFERENCES hexCodeTable($colCategoryName))');
     await db.execute('CREATE TABLE $categoryTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colCategoryName TEXT)');
   }
 
