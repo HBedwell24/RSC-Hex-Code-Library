@@ -25,12 +25,12 @@ class Category {
     if (id != null) {
       map['id'] = _id;
     }
-    map['name'] = _name;
+    map['categoryName'] = _name;
     return map;
   }
 
   Category.fromMapObject(Map<String, dynamic> map) {
     this._id = map['id'];
-    this._name = map['name'];
+    this._name = map['categoryName'];
   }
 }
