@@ -36,7 +36,7 @@ class CategoryState extends State<CategoryList> {
               color: Colors.white,
               tooltip: 'Add Category',
               onPressed: () {
-                navigateToCategoryDetailView(Category('', null), 'Add Category', 'Submit', false);
+                navigateToCategoryDetailView(Category(''), 'Add Category', 'Submit', false);
               }
           ),
         ],
@@ -74,7 +74,7 @@ class CategoryState extends State<CategoryList> {
                                   ),
                                 ]
                             ),
-                            title: Text(categoryList[position].name + " (" + decideRecordsLength(position) + ")"),
+                            title: Text(categoryList[position].name + " ()"),
                           ),
                         ],
                       ),
@@ -87,15 +87,6 @@ class CategoryState extends State<CategoryList> {
         ],
       ),
     );
-  }
-
-  String decideRecordsLength(int position) {
-    if (categoryList[position].records != null) {
-      return categoryList[position].records.length.toString();
-    }
-    else {
-      return '0';
-    }
   }
 
   void _showDialog(BuildContext context, int position) {
