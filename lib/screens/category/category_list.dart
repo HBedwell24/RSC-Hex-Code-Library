@@ -1,0 +1,155 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:rsc_hex_code_library/models/category.dart';
+import 'package:rsc_hex_code_library/utils/database_helper.dart';
+import 'package:sqflite/sqflite.dart';
+
+import 'category_detail.dart';
+
+class CategoryList extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return CategoryState();
+  }
+}
+
+class CategoryState extends State<CategoryList> {
+
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  List<Category> categoryList;
+  int count = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    if (categoryList == null) {
+      categoryList = List<Category>();
+      updateListView();
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Categories'),
+        actions: <Widget>[
+          new IconButton(
+              icon: new Icon(Icons.add),
+              color: Colors.white,
+              tooltip: 'Add Hex Code',
+              onPressed: () {
+                navigateToCategoryDetailView(Category('', null), 'Add Category', 'Submit', false);
+              }
+          ),
+        ],
+      ),
+      body: new Column(
+        children: <Widget>[
+          new Expanded(
+            child: ListView.builder(
+              itemCount: count,
+              itemBuilder: (BuildContext context, int position) {
+                return Center(
+                  child: Card(
+                    color: Colors.white,
+                    elevation: 2.0,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                IconButton(
+                                  icon: new Icon(Icons.edit),
+                                  tooltip: "Edit Category",
+                                  onPressed: () => navigateToCategoryDetailView(categoryList[position], 'Edit Category', 'Update', true),
+                                ),
+                                IconButton(
+                                  icon: new Icon(Icons.delete),
+                                  tooltip: "Delete Category",
+                                  onPressed: () => _showDialog(context, position),
+                                ),
+                              ]
+                          ),
+                          title: Text(categoryList[position].name + " (" + categoryList.length.toString() + ")"),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  MaterialColor decideShareColor() {
+    if (categoryList.length > 0) {
+      return Colors.blue;
+    }
+    else {
+      return Colors.lightGreen;
+    }
+  }
+
+  void _showDialog(BuildContext context, int position) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title:
+          new Text("Are you sure you want to delete the following item? This action cannot be undone."),
+          content: new Text(categoryList[position].name),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("NO"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("YES"),
+              onPressed: () {
+                _delete(context, categoryList[position]);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _delete(BuildContext context, Category category) async {
+    int result = await databaseHelper.deleteCategory(category.id);
+    if (result != 0) {
+      updateListView();
+    }
+  }
+
+  void navigateToCategoryDetailView(Category category, String title, String buttonText, bool isDisabled) async {
+    bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return CategoryDetail(category, title, buttonText, isDisabled);
+    }));
+
+    if (result == true) {
+      updateListView();
+    }
+  }
+
+  void updateListView() {
+    final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+    dbFuture.then((database) {
+      Future<List<Category>> categoryListFuture = databaseHelper.getCategoryList();
+      categoryListFuture.then((categoryList) {
+        setState(() {
+          this.categoryList = categoryList;
+          this.count = categoryList.length;
+        });
+      });
+    });
+  }
+}

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:rsc_hex_code_library/models/hex_code.dart';
 import 'package:rsc_hex_code_library/utils/database_helper.dart';
-import 'package:rsc_hex_code_library/screens/hex_code_detail.dart';
+import 'package:rsc_hex_code_library/screens/hex_code/hex_code_detail.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'hex_code_share.dart';
@@ -57,7 +57,7 @@ class HexCodeState extends State<HexCodeList> {
             onPressed: () {
               _newData.clear();
               controller.clear();
-              navigateToDetailView(HexCode('', '', false), 'Add Hex Code', 'Submit', false);
+              navigateToHexCodeDetailView(HexCode('', '', false), 'Add Hex Code', 'Submit', false);
             }
           ),
           new IconButton(
@@ -123,7 +123,7 @@ class HexCodeState extends State<HexCodeList> {
                                 IconButton(
                                   icon: new Icon(Icons.edit),
                                   tooltip: "Edit Hex Code",
-                                  onPressed: () => navigateToDetailView(decidePosition(context, position), 'Edit Hex Code', 'Update', true),
+                                  onPressed: () => navigateToHexCodeDetailView(decidePosition(context, position), 'Edit Hex Code', 'Update', true),
                                 ),
                                 IconButton(
                                   icon: new Icon(Icons.delete),
@@ -279,8 +279,7 @@ class HexCodeState extends State<HexCodeList> {
     }
   }
 
-  void navigateToDetailView(HexCode hexCode, String title,
-      String buttonText, bool isDisabled) async {
+  void navigateToHexCodeDetailView(HexCode hexCode, String title, String buttonText, bool isDisabled) async {
       bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
         return HexCodeDetail(hexCode, title, buttonText, isDisabled);
       }));

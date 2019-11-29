@@ -4,7 +4,7 @@ class Category {
   // member variables
   int _id;
   String _name;
-  List<HexCode> _records;
+  List<Category> _records;
 
   // HexCode constructor without id
   Category(this._name, this._records);
@@ -23,7 +23,7 @@ class Category {
   }
 
   // setter for category records
-  set records(List<HexCode> recordList) {
+  set records(List<Category> recordList) {
     if (recordList != null) {
       this._records = recordList;
     }

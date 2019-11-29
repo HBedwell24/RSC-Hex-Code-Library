@@ -1,3 +1,4 @@
+import 'package:rsc_hex_code_library/models/category.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
@@ -13,6 +14,10 @@ class DatabaseHelper {
   String colColorName = 'colorName';
   String colHexCode = 'hexCode';
   String colPearlescent = 'pearlescent';
+
+  String categoryTable = 'category_table';
+  String colCategoryName = 'category_name';
+  String colCategoryRecords = 'category_records';
 
   DatabaseHelper._createInstance();
 
@@ -32,7 +37,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'hexCode12.db';
+    String path = directory.path + 'hexCode56.db';
 
     var notesDatabase = await openDatabase(path, version: 1, onCreate: _createDb);
     return notesDatabase;
@@ -40,13 +45,22 @@ class DatabaseHelper {
 
   void _createDb(Database db, int newVersion) async {
     await db.execute('CREATE TABLE $hexCodeTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colColorName TEXT, $colHexCode TEXT, $colPearlescent TEXT)');
+    await db.execute('CREATE TABLE $categoryTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colCategoryName TEXT, $colCategoryRecords TEXT');
   }
 
-  // Fetch operation
+  // Fetch operation for hexCodeTable
   Future<List<Map<String, dynamic>>> getHexCodeMapList() async {
     Database db = await this.database;
 
     var result = await db.query(hexCodeTable);
+    return result;
+  }
+
+  // Fetch operation for categoryTable
+  Future<List<Map<String, dynamic>>> getCategoryMapList() async {
+    Database db = await this.database;
+
+    var result = await db.query(categoryTable);
     return result;
   }
 
@@ -57,10 +71,24 @@ class DatabaseHelper {
     return result;
   }
 
+  // Insert operation
+  Future<int> insertCategory(Category category) async {
+    Database db = await this.database;
+    var result = await db.insert(categoryTable, category.convertToMap());
+    return result;
+  }
+
   // Update operation
   Future<int> updateHexCode(HexCode hexCode) async {
     var db = await this.database;
     var result = await db.update(hexCodeTable, hexCode.convertToMap(), where: '$colId = ?', whereArgs: [hexCode.id]);
+    return result;
+  }
+
+  // Update operation
+  Future<int> updateCategory(Category category) async {
+    var db = await this.database;
+    var result = await db.update(categoryTable, category.convertToMap(), where: '$colId = ?', whereArgs: [category.id]);
     return result;
   }
 
@@ -71,10 +99,25 @@ class DatabaseHelper {
     return result;
   }
 
+  // Delete operation
+  Future<int> deleteCategory(int id) async {
+    var db = await this.database;
+    var result = await db.rawDelete('DELETE FROM $categoryTable WHERE $colId = $id');
+    return result;
+  }
+
   // Get # of hex code objects in database
-  Future<int> getCount() async {
+  Future<int> getHexCodeCount() async {
     var db = await this.database;
     List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from $hexCodeTable');
+    int result = Sqflite.firstIntValue(x);
+    return result;
+  }
+
+  // Get # of category objects in database
+  Future<int> getCategoryCount() async {
+    var db = await this.database;
+    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from $categoryTable');
     int result = Sqflite.firstIntValue(x);
     return result;
   }
@@ -90,5 +133,18 @@ class DatabaseHelper {
       hexCodeList.add(HexCode.fromMapObject(hexCodeMapList[i]));
     }
     return hexCodeList;
+  }
+
+  // Get the map list
+  Future<List<Category>> getCategoryList() async {
+
+    var categoryMapList = await getCategoryMapList();
+    int count = categoryMapList.length;
+
+    List<Category> categoryList = List<Category>();
+    for (int i = 0; i < count; i++) {
+      categoryList.add(Category.fromMapObject(categoryMapList[i]));
+    }
+    return categoryList;
   }
 }
