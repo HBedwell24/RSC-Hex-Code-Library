@@ -56,7 +56,7 @@ class HexCodeState extends State<HexCodeList> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hex Codes'),
+        title: Text(category.name),
         actions: <Widget>[
           new IconButton(
             icon: new Icon(Icons.add),
