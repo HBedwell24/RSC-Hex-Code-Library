@@ -63,7 +63,7 @@ class CategoryDetailState extends State<CategoryDetail> {
             child: ListView(
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                  padding: EdgeInsets.only(top: 15.0),
                   child: TextFormField(
                     textInputAction: TextInputAction.next,
                     validator: (name) {
