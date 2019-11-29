@@ -69,7 +69,7 @@ class CategoryState extends State<CategoryList> {
                                 ),
                               ]
                           ),
-                          title: Text(categoryList[position].name + " (" + categoryList.length.toString() + ")"),
+                          title: Text(categoryList[position].name + " (" + decideRecordsLength(position) + ")"),
                         ),
                       ],
                     ),
@@ -83,12 +83,12 @@ class CategoryState extends State<CategoryList> {
     );
   }
 
-  MaterialColor decideShareColor() {
-    if (categoryList.length > 0) {
-      return Colors.blue;
+  String decideRecordsLength(int position) {
+    if (categoryList[position].records != null) {
+      return categoryList[position].records.length.toString();
     }
     else {
-      return Colors.lightGreen;
+      return '0';
     }
   }
 

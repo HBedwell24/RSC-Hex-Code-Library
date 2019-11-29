@@ -16,8 +16,8 @@ class DatabaseHelper {
   String colPearlescent = 'pearlescent';
 
   String categoryTable = 'category_table';
-  String colCategoryName = 'category_name';
-  String colCategoryRecords = 'category_records';
+  String colCategoryName = 'name';
+  String colCategoryRecords = 'records';
 
   DatabaseHelper._createInstance();
 
@@ -37,7 +37,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'hexCode57.db';
+    String path = directory.path + 'hexCode60.db';
 
     var notesDatabase = await openDatabase(path, version: 1, onCreate: _createDb);
     return notesDatabase;
@@ -45,7 +45,7 @@ class DatabaseHelper {
 
   void _createDb(Database db, int newVersion) async {
     await db.execute('CREATE TABLE $hexCodeTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colColorName TEXT, $colHexCode TEXT, $colPearlescent TEXT)');
-    await db.execute('CREATE TABLE $categoryTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colCategoryName TEXT, $colCategoryRecords TEXT');
+    await db.execute('CREATE TABLE $categoryTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colCategoryName TEXT, $colCategoryRecords TEXT)');
   }
 
   // Fetch operation for hexCodeTable
