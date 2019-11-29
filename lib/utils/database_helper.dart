@@ -36,7 +36,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'hexCode62.db';
+    String path = directory.path + 'hexCode64.db';
 
     var notesDatabase = await openDatabase(path, version: 1, onCreate: _createDb);
     return notesDatabase;
@@ -117,6 +117,25 @@ class DatabaseHelper {
   Future<int> getCategoryCount() async {
     var db = await this.database;
     List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from $categoryTable');
+    int result = Sqflite.firstIntValue(x);
+    return result;
+  }
+
+  Future<List<HexCode>> getHexCodesFromCategory(String name) async {
+    var db = await this.database;
+    var result = await db.rawQuery('SELECT * FROM $hexCodeTable WHERE $colCategoryName = $name');
+    int count = result.length;
+
+    List<HexCode> hexCodeList = List<HexCode>();
+    for (int i = 0; i < count; i++) {
+      hexCodeList.add(HexCode.fromMapObject(result[i]));
+    }
+    return hexCodeList;
+  }
+
+  Future<int> getHexCodeCountFromCategory(String name) async {
+    var db = await this.database;
+    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) FROM $hexCodeTable WHERE $colCategoryName = $name');
     int result = Sqflite.firstIntValue(x);
     return result;
   }

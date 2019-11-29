@@ -310,7 +310,7 @@ class HexCodeState extends State<HexCodeList> {
   void updateListView() {
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database) {
-      Future<List<HexCode>> hexCodeListFuture = databaseHelper.getHexCodeList();
+      Future<List<HexCode>> hexCodeListFuture = databaseHelper.getHexCodesFromCategory(category.name);
       hexCodeListFuture.then((hexCodeList) {
         setState(() {
           this.hexCodeList = hexCodeList;
