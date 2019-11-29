@@ -34,7 +34,7 @@ class CategoryState extends State<CategoryList> {
           new IconButton(
               icon: new Icon(Icons.add),
               color: Colors.white,
-              tooltip: 'Add Hex Code',
+              tooltip: 'Add Category',
               onPressed: () {
                 navigateToCategoryDetailView(Category('', null), 'Add Category', 'Submit', false);
               }
@@ -51,29 +51,34 @@ class CategoryState extends State<CategoryList> {
                   child: Card(
                     color: Colors.white,
                     elevation: 2.0,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        ListTile(
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              IconButton(
-                                icon: new Icon(Icons.edit),
-                                tooltip: "Edit Category",
-                                onPressed: () => navigateToCategoryDetailView(categoryList[position], 'Edit Category', 'Update', true),
-                              ),
-                              IconButton(
-                                icon: new Icon(Icons.delete),
-                                tooltip: "Delete Category",
-                                onPressed: () => _showDialog(context, position),
-                              ),
-                            ]
+                    child: new InkWell(
+                      onTap: () {
+                        navigateToHexCodeListView(categoryList[position]);
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: new Icon(Icons.edit),
+                                    tooltip: "Edit Category",
+                                    onPressed: () => navigateToCategoryDetailView(categoryList[position], 'Edit Category', 'Update', true),
+                                  ),
+                                  IconButton(
+                                    icon: new Icon(Icons.delete),
+                                    tooltip: "Delete Category",
+                                    onPressed: () => _showDialog(context, position),
+                                  ),
+                                ]
+                            ),
+                            title: Text(categoryList[position].name + " (" + decideRecordsLength(position) + ")"),
                           ),
-                          title: Text(categoryList[position].name + " (" + decideRecordsLength(position) + ")"),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    )
                   ),
                 );
               },

@@ -22,7 +22,6 @@ class HexCodeList extends StatefulWidget {
 class HexCodeState extends State<HexCodeList> {
 
   DatabaseHelper databaseHelper = DatabaseHelper();
-  List<HexCode> hexCodeList;
   int count = 0;
 
   TextEditingController controller = new TextEditingController();
@@ -39,7 +38,7 @@ class HexCodeState extends State<HexCodeList> {
         _newData.clear();
       }
       else {
-        _newData = hexCodeList
+        _newData = category.records
             .where((hexCode) => hexCode.colorName.toString().toLowerCase().contains(value.toLowerCase()))
             .toList();
         _newCount = _newData.length;
@@ -49,8 +48,8 @@ class HexCodeState extends State<HexCodeList> {
 
   @override
   Widget build(BuildContext context) {
-    if (hexCodeList == null) {
-      hexCodeList = List<HexCode>();
+    if (category.records == null) {
+      category.records = List<HexCode>();
       updateListView();
     }
 
@@ -169,7 +168,7 @@ class HexCodeState extends State<HexCodeList> {
       return this._newData[position];
     }
     else {
-      return this.hexCodeList[position];
+      return this.category.records[position];
     }
   }
 
@@ -178,7 +177,7 @@ class HexCodeState extends State<HexCodeList> {
       return _newData[position].colorName;
     }
     else {
-      return hexCodeList[position].colorName;
+      return category.records[position].colorName;
     }
   }
 
@@ -192,17 +191,17 @@ class HexCodeState extends State<HexCodeList> {
       }
     }
     else {
-      if (hexCodeList[position].hexCode[0].contains('#')) {
-        return hexCodeList[position].hexCode;
+      if (category.records[position].hexCode[0].contains('#')) {
+        return category.records[position].hexCode;
       }
       else {
-        return '#' + hexCodeList[position].hexCode;
+        return '#' + category.records[position].hexCode;
       }
     }
   }
 
   void decideShareClickAction() {
-    if (hexCodeList.length > 0) {
+    if (category.records.length > 0) {
       navigateToShareView();
     }
     else {
@@ -211,7 +210,7 @@ class HexCodeState extends State<HexCodeList> {
   }
 
   MaterialColor decideShareColor() {
-    if (hexCodeList.length > 0) {
+    if (category.records.length > 0) {
       return Colors.blue;
     }
     else {
@@ -257,7 +256,7 @@ class HexCodeState extends State<HexCodeList> {
     else {
       return Text(decideHexCode(context, position) +
         ' w/ ' +
-        this.hexCodeList[position].pearlescent +
+        this.category.records[position].pearlescent +
         ' pearlescent');
     }
   }
@@ -267,7 +266,7 @@ class HexCodeState extends State<HexCodeList> {
       return _newData[position].pearlescent;
     }
     else {
-      return hexCodeList[position].pearlescent;
+      return category.records[position].pearlescent;
     }
   }
 
@@ -313,7 +312,7 @@ class HexCodeState extends State<HexCodeList> {
       Future<List<HexCode>> hexCodeListFuture = databaseHelper.getHexCodeList();
       hexCodeListFuture.then((hexCodeList) {
         setState(() {
-          this.hexCodeList = hexCodeList;
+          this.category.records = hexCodeList;
           this.count = hexCodeList.length;
 
           this._newData = _newData;
