@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:rsc_hex_code_library/models/category.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
@@ -132,6 +133,13 @@ class DatabaseHelper {
       hexCodeList.add(HexCode.fromMapObject(result[i]));
     }
     return hexCodeList;
+  }
+
+  // Delete hex codes from specific category in database
+  Future<int> deleteHexCodesFromCategory(String categoryName) async {
+    var db = await this.database;
+    var result = await db.delete(hexCodeTable, where: "$colCategoryName = ?", whereArgs: [categoryName]);
+    return result;
   }
 
   // Get count of hex codes from specific category in database

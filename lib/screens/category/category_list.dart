@@ -98,7 +98,7 @@ class CategoryState extends State<CategoryList> {
         // return object of type Dialog
         return AlertDialog(
           title:
-          new Text("Are you sure you want to delete the following item? This action cannot be undone."),
+          new Text("Are you sure you want to delete the following category? This action will delete all associated colors and cannot be undone."),
           content: new Text(categoryList[position].name),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
@@ -111,6 +111,8 @@ class CategoryState extends State<CategoryList> {
             new FlatButton(
               child: new Text("YES"),
               onPressed: () {
+                // delete hex codes from category and remove category from list view
+                databaseHelper.deleteHexCodesFromCategory(categoryList[position].name);
                 _delete(context, categoryList[position]);
                 Navigator.of(context).pop();
               },
