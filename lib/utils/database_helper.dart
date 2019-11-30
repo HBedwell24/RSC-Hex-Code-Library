@@ -95,6 +95,17 @@ class DatabaseHelper {
     return result;
   }
 
+  // Update category of all hex codes from specific category
+  Future<int> updateHexCodesFromCategory(String oldCategoryName, String newCategoryName) async {
+    var db = await this.database;
+    var result = await db.rawUpdate('''
+    UPDATE ${hexCodeTable} 
+    SET ${colCategoryName} = ?
+    WHERE ${colCategoryName} = ?
+    ''', [newCategoryName, oldCategoryName]);
+    return result;
+  }
+
   // Delete operation
   Future<int> deleteHexCode(int id) async {
     var db = await this.database;

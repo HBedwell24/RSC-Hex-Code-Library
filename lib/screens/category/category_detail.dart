@@ -27,6 +27,7 @@ class CategoryDetailState extends State<CategoryDetail> {
   Category category;
   String buttonText;
   bool isDisabled;
+  String oldCategoryName;
 
   TextEditingController categoryNameController = TextEditingController();
 
@@ -39,6 +40,9 @@ class CategoryDetailState extends State<CategoryDetail> {
     TextStyle textStyle = Theme.of(context).textTheme.title;
 
     categoryNameController.text = category.name;
+    if(category.name != null) {
+      oldCategoryName = category.name;
+    }
 
     return WillPopScope(
       onWillPop: () {
@@ -158,6 +162,7 @@ class CategoryDetailState extends State<CategoryDetail> {
 
     if (category.id != null) {
       result = await helper.updateCategory(category);
+      helper.updateHexCodesFromCategory(oldCategoryName, category.name);
     }
     else {
       result = await helper.insertCategory(category);
