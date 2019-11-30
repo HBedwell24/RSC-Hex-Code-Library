@@ -1,5 +1,3 @@
-import 'hex_code.dart';
-
 class Category {
   // member variables
   int _id;

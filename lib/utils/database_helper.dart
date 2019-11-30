@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:rsc_hex_code_library/models/category.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
@@ -10,12 +9,14 @@ class DatabaseHelper {
   static DatabaseHelper _databaseHelper;
   static Database _database;
 
+  // table name and column names for hex code table
   String hexCodeTable = 'hex_code_table';
   String colId = 'id';
   String colColorName = 'colorName';
   String colHexCode = 'hexCode';
   String colPearlescent = 'pearlescent';
 
+  // table name and column names for category table
   String categoryTable = 'category_table';
   String colCategoryName = 'categoryName';
 
@@ -35,6 +36,7 @@ class DatabaseHelper {
     return _database;
   }
 
+  // Initialize database
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = directory.path + 'hexCode64.db';
@@ -43,6 +45,7 @@ class DatabaseHelper {
     return notesDatabase;
   }
 
+  // Create database tables
   void _createDb(Database db, int newVersion) async {
     await db.execute('CREATE TABLE $hexCodeTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colColorName TEXT, $colHexCode TEXT, $colPearlescent TEXT, $colCategoryName TEXT, FOREIGN KEY($colCategoryName) REFERENCES hexCodeTable($colCategoryName))');
     await db.execute('CREATE TABLE $categoryTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colCategoryName TEXT)');
@@ -143,10 +146,15 @@ class DatabaseHelper {
   }
 
   // Get count of hex codes from specific category in database
-  Future<int> getHexCodeCountFromCategory(String categoryName) async {
+  Future<List<int>> getHexCodeCountsFromCategories(List<Category> categoryList) async {
     var db = await this.database;
-    int result = Sqflite.firstIntValue(await db.query(hexCodeTable, columns: ['COUNT(*)'], where: "$colCategoryName = ?", whereArgs: [categoryName]));
-    return result;
+    List<int> countList = List<int>();
+    // loop through each category and count number of occurrences
+    for(int i = 0; i < categoryList.length; i++) {
+      int result = Sqflite.firstIntValue(await db.query(hexCodeTable, columns: ['COUNT(*)'], where: "$colCategoryName = ?", whereArgs: [categoryList[i].name]));
+      countList.add(result);
+    }
+    return countList;
   }
 
   // Get the map list

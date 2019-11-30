@@ -29,94 +29,94 @@ class CategoryState extends State<CategoryList> {
     }
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Categories'),
-          actions: <Widget>[
-            new IconButton(
-                icon: new Icon(Icons.add),
-                color: Colors.white,
-                tooltip: 'Add Category',
-                onPressed: () {
-                  navigateToCategoryDetailView(Category(''), 'Add Category', 'Submit', false);
+      appBar: AppBar(
+        title: Text('Categories'),
+        actions: <Widget>[
+          new IconButton(
+            icon: new Icon(Icons.add),
+            color: Colors.white,
+            tooltip: 'Add Category',
+            onPressed: () {
+              navigateToCategoryDetailView(Category(''), 'Add Category', 'Submit', false);
+            }
+          ),
+        ],
+      ),
+      body: new Column(
+        children: <Widget>[
+          new Expanded(
+            child: FutureBuilder<List<int>>(
+              future: databaseHelper.getHexCodeCountsFromCategories(categoryList),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.none ||
+                    snapshot.connectionState == ConnectionState.waiting ||
+                    snapshot.connectionState == ConnectionState.active) {
+                  return Container(
+                    alignment: Alignment.center,
+                    child: Text("Loading"),
+                  );
                 }
-            ),
-          ],
-        ),
-        body: new Column(
-            children: <Widget>[
-              new Expanded(
-                  child: FutureBuilder<int>(
-                      future: databaseHelper.getHexCodeCountFromCategory('Dodge'),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.none ||
-                            snapshot.connectionState == ConnectionState.waiting ||
-                            snapshot.connectionState == ConnectionState.active) {
-                          return Container(
-                            alignment: Alignment.center,
-                            child: Text("Loading"),
-                          );
-                        }
-                        else if (snapshot.connectionState == ConnectionState.done) {
-                          if (snapshot.hasError) {
-                            // return whatever you'd do for this case, probably an error
-                            return Container(
-                              alignment: Alignment.center,
-                              child: Text("Error: ${snapshot.error}"),
-                            );
-                          }
-                          else {
-                            var data = snapshot.data;
-                            return new ListView.builder(
-                              itemCount: count,
-                              itemBuilder: (BuildContext context, int position) {
-                                return Center(
-                                  child: Card(
-                                      color: Colors.white,
-                                      elevation: 2.0,
-                                      child: new InkWell(
-                                        onTap: () {
-                                          navigateToHexCodeListView(categoryList[position]);
-                                        },
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            ListTile(
-                                              trailing: Row(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: <Widget>[
-                                                    IconButton(
-                                                      icon: new Icon(Icons.edit),
-                                                      tooltip: "Edit Category",
-                                                      onPressed: () =>
-                                                          navigateToCategoryDetailView(categoryList[position],
-                                                              'Edit Category', 'Update', true),
-                                                    ),
-                                                    IconButton(
-                                                      icon: new Icon(
-                                                          Icons.delete),
-                                                      tooltip: "Delete Category",
-                                                      onPressed: () => _showDialog(context, position),
-                                                    ),
-                                                  ]
-                                              ),
-                                              title: Text(
-                                                  categoryList[position].name + " (" + data.toString() + ")"),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                  ),
-                                );
+                else if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    // return whatever you'd do for this case, probably an error
+                    return Container(
+                      alignment: Alignment.center,
+                      child: Text("Error: ${snapshot.error}"),
+                    );
+                  }
+                  else {
+                    var data = snapshot.data;
+                    return new ListView.builder(
+                      itemCount: count,
+                      itemBuilder: (BuildContext context, int position) {
+                        return Center(
+                          child: Card(
+                            color: Colors.white,
+                            elevation: 2.0,
+                            child: new InkWell(
+                              onTap: () {
+                                navigateToHexCodeListView(categoryList[position]);
                               },
-                            );
-                          }
-                        }
-                        return Container();
-                      }
-                  )
-              )
-            ]
-        )
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  ListTile(
+                                    trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        IconButton(
+                                          icon: new Icon(Icons.edit),
+                                          tooltip: "Edit Category",
+                                          onPressed: () =>
+                                            navigateToCategoryDetailView(categoryList[position],
+                                              'Edit Category', 'Update', true),
+                                        ),
+                                        IconButton(
+                                          icon: new Icon(
+                                            Icons.delete),
+                                          tooltip: "Delete Category",
+                                          onPressed: () => _showDialog(context, position),
+                                        ),
+                                      ],
+                                    ),
+                                    title: Text(
+                                      categoryList[position].name + " (" + data[position].toString() + ")"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                }
+                return Container();
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 

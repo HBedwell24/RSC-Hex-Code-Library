@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rsc_hex_code_library/screens/category/category_list.dart';
-import 'package:rsc_hex_code_library/screens/hex_code/hex_code_list.dart';
 
 void main() => runApp(MyApp());
 
