@@ -45,8 +45,8 @@ class CategoryState extends State<CategoryList> {
         body: new Column(
             children: <Widget>[
               new Expanded(
-                  child: FutureBuilder(
-                      future: databaseHelper.getCategoryList(),
+                  child: FutureBuilder<int>(
+                      future: databaseHelper.getHexCodeCountFromCategory('Dodge'),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.none ||
                             snapshot.connectionState == ConnectionState.waiting ||
@@ -64,65 +64,60 @@ class CategoryState extends State<CategoryList> {
                               child: Text("Error: ${snapshot.error}"),
                             );
                           }
-                          var data = snapshot.data;
-                          return new ListView.builder(
-                            itemCount: count,
-                            itemBuilder: (BuildContext context, int position) {
-                              return Center(
-                                child: Card(
-                                    color: Colors.white,
-                                    elevation: 2.0,
-                                    child: new InkWell(
-                                      onTap: () {
-                                        navigateToHexCodeListView(
-                                            categoryList[position]);
-                                      },
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          ListTile(
-                                            trailing: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: <Widget>[
-                                                  IconButton(
-                                                    icon: new Icon(Icons.edit),
-                                                    tooltip: "Edit Category",
-                                                    onPressed: () =>
-                                                        navigateToCategoryDetailView(
-                                                            categoryList[position],
-                                                            'Edit Category',
-                                                            'Update', true),
-                                                  ),
-                                                  IconButton(
-                                                    icon: new Icon(
-                                                        Icons.delete),
-                                                    tooltip: "Delete Category",
-                                                    onPressed: () =>
-                                                        _showDialog(
-                                                            context, position),
-                                                  ),
-                                                ]
+                          else {
+                            var data = snapshot.data;
+                            return new ListView.builder(
+                              itemCount: count,
+                              itemBuilder: (BuildContext context, int position) {
+                                return Center(
+                                  child: Card(
+                                      color: Colors.white,
+                                      elevation: 2.0,
+                                      child: new InkWell(
+                                        onTap: () {
+                                          navigateToHexCodeListView(categoryList[position]);
+                                        },
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            ListTile(
+                                              trailing: Row(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: <Widget>[
+                                                    IconButton(
+                                                      icon: new Icon(Icons.edit),
+                                                      tooltip: "Edit Category",
+                                                      onPressed: () =>
+                                                          navigateToCategoryDetailView(categoryList[position],
+                                                              'Edit Category', 'Update', true),
+                                                    ),
+                                                    IconButton(
+                                                      icon: new Icon(
+                                                          Icons.delete),
+                                                      tooltip: "Delete Category",
+                                                      onPressed: () => _showDialog(context, position),
+                                                    ),
+                                                  ]
+                                              ),
+                                              title: Text(
+                                                  categoryList[position].name + " (" + data.toString() + ")"),
                                             ),
-                                            title: Text(
-                                                categoryList[position].name
-                                                    + " (" + databaseHelper
-                                                    .getHexCodeCountFromCategory(
-                                                    categoryList[position].name)
-                                                    .toString() + ")"),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                ),
-                              );
-                            },
-                          );
+                                          ],
+                                        ),
+                                      )
+                                  ),
+                                );
+                              },
+                            );
+                          }
                         }
                         return Container();
                       }
                   )
               )
-            ]));
+            ]
+        )
+    );
   }
 
   void _showDialog(BuildContext context, int position) {
