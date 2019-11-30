@@ -74,7 +74,8 @@ class CategoryState extends State<CategoryList> {
                                   ),
                                 ]
                             ),
-                            title: Text(categoryList[position].name + " ()"),
+                            title: Text(categoryList[position].name
+                                + " (" + databaseHelper.getHexCodeCountFromCategory(categoryList[position].name).toString() + ")"),
                           ),
                         ],
                       ),
