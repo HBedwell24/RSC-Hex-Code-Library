@@ -51,7 +51,7 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getHexCodeMapList() async {
     Database db = await this.database;
 
-    var result = await db.query(hexCodeTable);
+    var result = await db.query(hexCodeTable, orderBy: colColorName);
     return result;
   }
 
@@ -59,7 +59,7 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getCategoryMapList() async {
     Database db = await this.database;
 
-    var result = await db.query(categoryTable);
+    var result = await db.query(categoryTable, orderBy: colCategoryName);
     return result;
   }
 
@@ -122,9 +122,9 @@ class DatabaseHelper {
   }
 
   // Get hex codes from specific category in database
-  Future<List<HexCode>> getHexCodesFromCategory(String name) async {
+  Future<List<HexCode>> getHexCodesFromCategory(String categoryName) async {
     var db = await this.database;
-    var result = await db.rawQuery('SELECT * FROM $hexCodeTable WHERE $colCategoryName = $name');
+    var result = await db.query(hexCodeTable, orderBy: colColorName, where: "$colCategoryName = ?", whereArgs: [categoryName]);
     int count = result.length;
 
     List<HexCode> hexCodeList = List<HexCode>();
@@ -137,8 +137,7 @@ class DatabaseHelper {
   // Get count of hex codes from specific category in database
   Future<int> getHexCodeCountFromCategory(String categoryName) async {
     var db = await this.database;
-    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) FROM $hexCodeTable WHERE $colCategoryName = $categoryName');
-    int result = Sqflite.firstIntValue(x);
+    int result = Sqflite.firstIntValue(await db.query(hexCodeTable, columns: ['COUNT(*)'], where: "$colCategoryName = ?", whereArgs: [categoryName]));
     return result;
   }
 
