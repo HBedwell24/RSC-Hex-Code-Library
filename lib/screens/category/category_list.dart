@@ -18,6 +18,7 @@ class CategoryState extends State<CategoryList> {
 
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<Category> categoryList;
+  Future<int> future;
   int count = 0;
 
   @override
@@ -28,66 +29,100 @@ class CategoryState extends State<CategoryList> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Categories'),
-        actions: <Widget>[
-          new IconButton(
-              icon: new Icon(Icons.add),
-              color: Colors.white,
-              tooltip: 'Add Category',
-              onPressed: () {
-                navigateToCategoryDetailView(Category(''), 'Add Category', 'Submit', false);
-              }
-          ),
-        ],
-      ),
-      body: new Column(
-        children: <Widget>[
-          new Expanded(
-            child: ListView.builder(
-              itemCount: count,
-              itemBuilder: (BuildContext context, int position) {
-                return Center(
-                  child: Card(
-                    color: Colors.white,
-                    elevation: 2.0,
-                    child: new InkWell(
-                      onTap: () {
-                        navigateToHexCodeListView(categoryList[position]);
-                      },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          ListTile(
-                            trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  IconButton(
-                                    icon: new Icon(Icons.edit),
-                                    tooltip: "Edit Category",
-                                    onPressed: () => navigateToCategoryDetailView(categoryList[position], 'Edit Category', 'Update', true),
-                                  ),
-                                  IconButton(
-                                    icon: new Icon(Icons.delete),
-                                    tooltip: "Delete Category",
-                                    onPressed: () => _showDialog(context, position),
-                                  ),
-                                ]
-                            ),
-                            title: Text(categoryList[position].name
-                                + " (" + databaseHelper.getHexCodeCountFromCategory(categoryList[position].name).toString() + ")"),
-                          ),
-                        ],
-                      ),
-                    )
-                  ),
-                );
-              },
+        appBar: AppBar(
+          title: Text('Categories'),
+          actions: <Widget>[
+            new IconButton(
+                icon: new Icon(Icons.add),
+                color: Colors.white,
+                tooltip: 'Add Category',
+                onPressed: () {
+                  navigateToCategoryDetailView(Category(''), 'Add Category', 'Submit', false);
+                }
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+        body: new Column(
+            children: <Widget>[
+              new Expanded(
+                  child: FutureBuilder(
+                      future: databaseHelper.getCategoryList(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.none ||
+                            snapshot.connectionState == ConnectionState.waiting ||
+                            snapshot.connectionState == ConnectionState.active) {
+                          return Container(
+                            alignment: Alignment.center,
+                            child: Text("Loading"),
+                          );
+                        }
+                        else if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.hasError) {
+                            // return whatever you'd do for this case, probably an error
+                            return Container(
+                              alignment: Alignment.center,
+                              child: Text("Error: ${snapshot.error}"),
+                            );
+                          }
+                          var data = snapshot.data;
+                          return new ListView.builder(
+                            itemCount: count,
+                            itemBuilder: (BuildContext context, int position) {
+                              return Center(
+                                child: Card(
+                                    color: Colors.white,
+                                    elevation: 2.0,
+                                    child: new InkWell(
+                                      onTap: () {
+                                        navigateToHexCodeListView(
+                                            categoryList[position]);
+                                      },
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          ListTile(
+                                            trailing: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  IconButton(
+                                                    icon: new Icon(Icons.edit),
+                                                    tooltip: "Edit Category",
+                                                    onPressed: () =>
+                                                        navigateToCategoryDetailView(
+                                                            categoryList[position],
+                                                            'Edit Category',
+                                                            'Update', true),
+                                                  ),
+                                                  IconButton(
+                                                    icon: new Icon(
+                                                        Icons.delete),
+                                                    tooltip: "Delete Category",
+                                                    onPressed: () =>
+                                                        _showDialog(
+                                                            context, position),
+                                                  ),
+                                                ]
+                                            ),
+                                            title: Text(
+                                                categoryList[position].name
+                                                    + " (" + databaseHelper
+                                                    .getHexCodeCountFromCategory(
+                                                    categoryList[position].name)
+                                                    .toString() + ")"),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                ),
+                              );
+                            },
+                          );
+                        }
+                        return Container();
+                      }
+                  )
+              )
+            ]));
   }
 
   void _showDialog(BuildContext context, int position) {
