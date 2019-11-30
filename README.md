@@ -1,2 +1,2 @@
 # RSC Hex Code Library
-A cross platform mobile application built in Flutter, that possesses the capability of storing Hex code color pairs within a SQLite setting.
+A cross platform mobile application built in Flutter, that possesses the capability of storing Hex code color pairs in an SQLite database, all which updates the items in a list view. The user may add a new Hex code, edit an existing hex code, or delete a Hex code from the database, all which updates the items in the list view. In addition, the user may select one or many of the Hex code pairs to share with an imported contact.
