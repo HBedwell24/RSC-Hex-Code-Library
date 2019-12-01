@@ -59,22 +59,22 @@ class HexCodeState extends State<HexCodeList> {
         title: Text(category.name),
         actions: <Widget>[
           new IconButton(
-            icon: new Icon(Icons.add),
-            color: Colors.white,
-            tooltip: 'Add Hex Code',
-            onPressed: () {
-              _newData.clear();
-              controller.clear();
-              navigateToHexCodeDetailView(HexCode('', '', category.name, false), 'Add Hex Code', 'Submit', false);
-            }
+              icon: new Icon(Icons.add),
+              color: Colors.white,
+              tooltip: 'Add Hex Code',
+              onPressed: () {
+                _newData.clear();
+                controller.clear();
+                navigateToHexCodeDetailView(HexCode('', '', category.name, false), 'Add Hex Code', 'Submit', false);
+              }
           ),
           new IconButton(
-            icon: new Icon(Icons.share),
-            color: Colors.white,
-            tooltip: 'Share Hex Code(s)',
-            onPressed: () {
-              decideShareClickAction();
-            }
+              icon: new Icon(Icons.share),
+              color: Colors.white,
+              tooltip: 'Share Hex Code(s)',
+              onPressed: () {
+                decideShareClickAction();
+              }
           )
         ],
       ),
@@ -119,10 +119,10 @@ class HexCodeState extends State<HexCodeList> {
                             width: 42.0,
                             height: 42.0,
                             decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Color(
-                                convertHexCode(decideHexCode(context, position))
-                              )
+                                shape: BoxShape.circle,
+                                color: Color(
+                                    convertHexCode(decideHexCode(context, position))
+                                )
                             ),
                           ),
                           trailing: Row(
@@ -185,18 +185,18 @@ class HexCodeState extends State<HexCodeList> {
   decideHexCode(BuildContext context, int position) {
     if (_newData.length > 0) {
       if (_newData[position].hexCode[0].contains('#')) {
-        return _newData[position].hexCode;
+        return _newData[position].hexCode.toUpperCase();
       }
       else {
-        return '#' + _newData[position].hexCode;
+        return '#' + _newData[position].hexCode.toUpperCase();
       }
     }
     else {
       if (hexCodeList[position].hexCode[0].contains('#')) {
-        return hexCodeList[position].hexCode;
+        return hexCodeList[position].hexCode.toUpperCase();
       }
       else {
-        return '#' + hexCodeList[position].hexCode;
+        return '#' + hexCodeList[position].hexCode.toUpperCase();
       }
     }
   }
@@ -227,7 +227,7 @@ class HexCodeState extends State<HexCodeList> {
         // return object of type Dialog
         return AlertDialog(
           title:
-              new Text("Are you sure you want to delete the following item? This action cannot be undone."),
+          new Text("Are you sure you want to delete the following item? This action cannot be undone."),
           content: new Text(decideColorName(context, position) + " (" + decideHexCode(context, position) + ")"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
@@ -256,9 +256,9 @@ class HexCodeState extends State<HexCodeList> {
     }
     else {
       return Text(decideHexCode(context, position) +
-        ' w/ ' +
-        this.hexCodeList[position].pearlescent +
-        ' pearlescent');
+          ' w/ ' +
+          this.hexCodeList[position].pearlescent +
+          ' pearlescent');
     }
   }
 
@@ -288,9 +288,9 @@ class HexCodeState extends State<HexCodeList> {
   }
 
   void navigateToHexCodeDetailView(HexCode hexCode, String title, String buttonText, bool isDisabled) async {
-      bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return HexCodeDetail(hexCode, title, buttonText, isDisabled);
-      }));
+    bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return HexCodeDetail(hexCode, title, buttonText, isDisabled);
+    }));
 
     if (result == true) {
       updateListView();

@@ -176,23 +176,6 @@ class CategoryDetailState extends State<CategoryDetail> {
     }
   }
 
-  void _delete() async {
-    moveToLastScreen();
-
-    if (category.id == null) {
-      _showAlertDialog('Status', 'No category was deleted!');
-      return;
-    }
-
-    int result = await helper.deleteCategory(category.id);
-    if (result != 0) {
-      _showAlertDialog('Status', 'Hex code was deleted successfully!');
-    }
-    else {
-      _showAlertDialog('Status', 'Deletion unsuccessful!');
-    }
-  }
-
   void _showAlertDialog(String title, String message) {
     AlertDialog alertDialog = AlertDialog(
       title: Text(title),

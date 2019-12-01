@@ -33,7 +33,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
     'Bleached Brown', 'Schafter Purple', 'Spinnaker Purple', 'Midnight Purple', 'Bright Purple',
     'Cream', 'Ice White', 'Frost White', 'Worn Blue Silver', 'Worn Golden Red', 'Worn Shadow Silver',
     'Worn Green', 'Worn Sea Wash', 'Worn Baby Blue', 'Util Silver', 'MP100'
-    ];
+  ];
 
   DatabaseHelper helper = DatabaseHelper();
 
@@ -121,7 +121,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
                       labelStyle: textStyle,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0)
+                        borderRadius: BorderRadius.circular(5.0)
                       ),
                     ),
                   ),
@@ -254,7 +254,7 @@ class HexCodeDetailState extends State<HexCodeDetail> {
   }
 
   void updatePearlescent(String pearlescent) {
-      hexCode.pearlescent = pearlescent;
+    hexCode.pearlescent = pearlescent;
   }
 
   void _save() async {
@@ -276,23 +276,6 @@ class HexCodeDetailState extends State<HexCodeDetail> {
     }
     else {
       _showAlertDialog('Status', 'Something went wrong! Please try again!');
-    }
-  }
-
-  void _delete() async {
-    moveToLastScreen();
-
-    if (hexCode.id == null) {
-      _showAlertDialog('Status', 'No Hex code was deleted!');
-      return;
-    }
-
-    int result = await helper.deleteHexCode(hexCode.id);
-    if (result != 0) {
-      _showAlertDialog('Status', 'Hex code was deleted successfully!');
-    }
-    else {
-      _showAlertDialog('Status', 'Deletion unsuccessful!');
     }
   }
 
