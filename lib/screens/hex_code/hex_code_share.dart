@@ -263,23 +263,23 @@ class HexCodeState extends State<HexCodeShare> {
   // decides contents of subtitle based on presence of optional parameters
   Widget decideSubtitle(BuildContext context, int position) {
     if (hexCodeList[position].hexCode[0].contains('#')) {
-      if (this.hexCodeList[position].pearlescent.isEmpty) {
+      if (this.hexCodeList[position].pearlescent.isEmpty || this.hexCodeList[position].pearlescent.contains('No Selection')) {
         return Text(this.hexCodeList[position].hexCode.toUpperCase());
       }
       else {
         return Text(this.hexCodeList[position].hexCode.toUpperCase() +
           ' w/ ' + this.hexCodeList[position].pearlescent +
-          ' pearlescent');
+          ' Pearlescent');
       }
     }
     else {
-      if (this.hexCodeList[position].pearlescent.isEmpty) {
+      if (this.hexCodeList[position].pearlescent.isEmpty || this.hexCodeList[position].pearlescent.contains('No Selection')) {
         return Text('#' + this.hexCodeList[position].hexCode.toUpperCase());
       }
       else {
         return Text('#' + this.hexCodeList[position].hexCode.toUpperCase() +
           ' w/ ' + this.hexCodeList[position].pearlescent +
-          ' pearlescent');
+          ' Pearlescent');
       }
     }
   }

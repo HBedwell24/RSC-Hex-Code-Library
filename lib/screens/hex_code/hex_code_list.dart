@@ -251,14 +251,14 @@ class HexCodeState extends State<HexCodeList> {
   }
 
   Widget decideSubtitle(BuildContext context, int position) {
-    if (decidePearlescent(context, position).isEmpty) {
+    if (decidePearlescent(context, position).isEmpty || decidePearlescent(context, position).contains('No Selection')) {
       return Text(decideHexCode(context, position));
     }
     else {
       return Text(decideHexCode(context, position) +
           ' w/ ' +
           this.hexCodeList[position].pearlescent +
-          ' pearlescent');
+          ' Pearlescent');
     }
   }
 

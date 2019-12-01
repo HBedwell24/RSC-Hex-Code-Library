@@ -19,7 +19,7 @@ class HexCodeDetail extends StatefulWidget {
 
 class HexCodeDetailState extends State<HexCodeDetail> {
 
-  static var _pearlescents = ['Black', 'Carbon Black', 'Graphite', 'Anthracite Black',
+  static var _pearlescents = ['No Selection', 'Black', 'Carbon Black', 'Graphite', 'Anthracite Black',
     'Black Steel', 'Dark Steel', 'Silver', 'Bluish Silver', 'Rolled Steel', 'Shadow Silver',
     'Stone Silver', 'Midnight Silver', 'Cast Iron Silver', 'Red', 'Torino Red', 'Formula Red',
     'Lava Red', 'Blaze Red', 'Grace Red', 'Garnet Red', 'Sunset Red', 'Cabernet Red', 'Cabernet',
