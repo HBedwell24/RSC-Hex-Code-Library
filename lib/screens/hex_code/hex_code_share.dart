@@ -126,7 +126,17 @@ class HexCodeState extends State<HexCodeShare> {
                       setState(() {
                         this.hexCodeList[position].isSelected = value;
                         if (this.hexCodeList[position].isSelected == true) {
-                          if (this.hexCodeList[position].pearlescent.isNotEmpty) {
+                          if (this.hexCodeList[position].pearlescent.isEmpty || this.hexCodeList[position].pearlescent.contains('No Selection')) {
+                            if(this.hexCodeList[position].hexCode[0].contains('#')) {
+                              shareList.add(this.hexCodeList[position].colorName + " (" + this.hexCodeList[position].hexCode.toUpperCase() + ")");
+                              print("ShareList: " + shareList.toString());
+                            }
+                            else {
+                              shareList.add(this.hexCodeList[position].colorName + " (#" + this.hexCodeList[position].hexCode.toUpperCase() + ")");
+                              print("ShareList: " + shareList.toString());
+                            }
+                          }
+                          else {
                             if(this.hexCodeList[position].hexCode[0].contains('#')) {
                               shareList.add(this.hexCodeList[position].colorName + " (" + this.hexCodeList[position].hexCode.toUpperCase() + ") w/ " +
                                   this.hexCodeList[position].pearlescent + " Pearlescent");
@@ -138,19 +148,19 @@ class HexCodeState extends State<HexCodeShare> {
                               print("ShareList: " + shareList.toString());
                             }
                           }
-                          else {
+                        }
+                        else {
+                          if (this.hexCodeList[position].pearlescent.isEmpty || this.hexCodeList[position].pearlescent.contains('No Selection')) {
                             if(this.hexCodeList[position].hexCode[0].contains('#')) {
-                              shareList.add(this.hexCodeList[position].colorName + " (" + this.hexCodeList[position].hexCode.toUpperCase() + ")");
+                              shareList.remove(this.hexCodeList[position].colorName + " (" + this.hexCodeList[position].hexCode.toUpperCase() + ")");
                               print("ShareList: " + shareList.toString());
                             }
-                            else {
-                              shareList.add(this.hexCodeList[position].colorName + " (#" + this.hexCodeList[position].hexCode.toUpperCase() + ")");
+                            else  {
+                              shareList.remove(this.hexCodeList[position].colorName + " (#" + this.hexCodeList[position].hexCode.toUpperCase() + ")");
                               print("ShareList: " + shareList.toString());
                             }
                           }
-                        }
-                        else {
-                          if (this.hexCodeList[position].pearlescent.isNotEmpty) {
+                          else {
                             if(this.hexCodeList[position].hexCode[0].contains('#')) {
                               shareList.remove(this.hexCodeList[position].colorName + " (" + this.hexCodeList[position].hexCode.toUpperCase() + ") w/ " +
                                   this.hexCodeList[position].pearlescent + " Pearlescent");
@@ -159,16 +169,6 @@ class HexCodeState extends State<HexCodeShare> {
                             else {
                               shareList.remove(this.hexCodeList[position].colorName + " (#" + this.hexCodeList[position].hexCode.toUpperCase() + ") w/ " +
                                   this.hexCodeList[position].pearlescent + " Pearlescent");
-                              print("ShareList: " + shareList.toString());
-                            }
-                          }
-                          else {
-                            if(this.hexCodeList[position].hexCode[0].contains('#')) {
-                              shareList.remove(this.hexCodeList[position].colorName + " (" + this.hexCodeList[position].hexCode.toUpperCase() + ")");
-                              print("ShareList: " + shareList.toString());
-                            }
-                            else  {
-                              shareList.remove(this.hexCodeList[position].colorName + " (#" + this.hexCodeList[position].hexCode.toUpperCase() + ")");
                               print("ShareList: " + shareList.toString());
                             }
                           }
@@ -211,25 +211,25 @@ class HexCodeState extends State<HexCodeShare> {
                       if(hexCodeList[i].isSelected == false) {
                         hexCodeList[i].isSelected = true;
 
-                        if(this.hexCodeList[i].pearlescent.isNotEmpty) {
-                          if(this.hexCodeList[i].hexCode[0].contains('#')) {
-                            shareList.add(this.hexCodeList[i].colorName + " (" + this.hexCodeList[i].hexCode.toUpperCase() + ") w/ " +
-                              this.hexCodeList[i].pearlescent + " Pearlescent");
-                            print("ShareList: " + shareList.toString());
-                          }
-                          else {
-                            shareList.add(this.hexCodeList[i].colorName + " (#" + this.hexCodeList[i].hexCode.toUpperCase() + ") w/ " +
-                              this.hexCodeList[i].pearlescent + " Pearlescent");
-                            print("ShareList: " + shareList.toString());
-                          }
-                        }
-                        else {
+                        if(this.hexCodeList[i].pearlescent.isEmpty || this.hexCodeList[i].pearlescent.contains('No Selection')) {
                           if(this.hexCodeList[i].hexCode[0].contains('#')) {
                             shareList.add(this.hexCodeList[i].colorName + " (" + this.hexCodeList[i].hexCode.toUpperCase() + ")");
                             print("ShareList: " + shareList.toString());
                           }
                           else {
                             shareList.add(this.hexCodeList[i].colorName + " (#" + this.hexCodeList[i].hexCode.toUpperCase() + ")");
+                            print("ShareList: " + shareList.toString());
+                          }
+                        }
+                        else {
+                          if(this.hexCodeList[i].hexCode[0].contains('#')) {
+                            shareList.add(this.hexCodeList[i].colorName + " (" + this.hexCodeList[i].hexCode.toUpperCase() + ") w/ " +
+                                this.hexCodeList[i].pearlescent + " Pearlescent");
+                            print("ShareList: " + shareList.toString());
+                          }
+                          else {
+                            shareList.add(this.hexCodeList[i].colorName + " (#" + this.hexCodeList[i].hexCode.toUpperCase() + ") w/ " +
+                                this.hexCodeList[i].pearlescent + " Pearlescent");
                             print("ShareList: " + shareList.toString());
                           }
                         }
