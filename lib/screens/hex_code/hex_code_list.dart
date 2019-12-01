@@ -299,7 +299,7 @@ class HexCodeState extends State<HexCodeList> {
 
   void navigateToShareView() async {
     bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return HexCodeShare();
+      return HexCodeShare(category);
     }));
 
     if (result == true) {

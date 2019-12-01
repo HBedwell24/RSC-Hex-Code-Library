@@ -33,12 +33,12 @@ class CategoryState extends State<CategoryList> {
         title: Text('Categories'),
         actions: <Widget>[
           new IconButton(
-            icon: new Icon(Icons.add),
-            color: Colors.white,
-            tooltip: 'Add Category',
-            onPressed: () {
-              navigateToCategoryDetailView(Category(''), 'Add Category', 'Submit', false);
-            }
+              icon: new Icon(Icons.add),
+              color: Colors.white,
+              tooltip: 'Add Category',
+              onPressed: () {
+                navigateToCategoryDetailView(Category(''), 'Add Category', 'Submit', false);
+              }
           ),
         ],
       ),
@@ -88,19 +88,19 @@ class CategoryState extends State<CategoryList> {
                                           icon: new Icon(Icons.edit),
                                           tooltip: "Edit Category",
                                           onPressed: () =>
-                                            navigateToCategoryDetailView(categoryList[position],
-                                              'Edit Category', 'Update', true),
+                                              navigateToCategoryDetailView(categoryList[position],
+                                                  'Edit Category', 'Update', true),
                                         ),
                                         IconButton(
                                           icon: new Icon(
-                                            Icons.delete),
+                                              Icons.delete),
                                           tooltip: "Delete Category",
                                           onPressed: () => _showDialog(context, position),
                                         ),
                                       ],
                                     ),
                                     title: Text(
-                                      categoryList[position].name + " (" + data[position].toString() + ")"),
+                                        categoryList[position].name + " (" + data[position].toString() + ")"),
                                   ),
                                 ],
                               ),

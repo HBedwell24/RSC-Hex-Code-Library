@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:rsc_hex_code_library/models/category.dart';
 import 'package:rsc_hex_code_library/models/hex_code.dart';
 import 'package:rsc_hex_code_library/utils/database_helper.dart';
 import 'package:share/share.dart';
@@ -8,17 +9,25 @@ import 'package:sqflite/sqflite.dart';
 List<String> shareList = List<String>();
 
 class HexCodeShare extends StatefulWidget {
+
+  final Category category;
+
+  HexCodeShare(this.category);
+
   @override
   State<StatefulWidget> createState() {
-    return HexCodeState();
+    return HexCodeState(this.category);
   }
 }
 
 class HexCodeState extends State<HexCodeShare> {
   DatabaseHelper databaseHelper = DatabaseHelper();
   List<HexCode> hexCodeList;
+  Category category;
   int count = 0;
   bool isSelected = false;
+
+  HexCodeState(this.category);
 
   @override
   Widget build(BuildContext context) {
@@ -288,7 +297,7 @@ class HexCodeState extends State<HexCodeShare> {
   void updateListView() {
     final Future<Database> dbFuture = databaseHelper.initializeDatabase();
     dbFuture.then((database) {
-      Future<List<HexCode>> hexCodeListFuture = databaseHelper.getHexCodeList();
+      Future<List<HexCode>> hexCodeListFuture = databaseHelper.getHexCodesFromCategory(category.name);
       hexCodeListFuture.then((hexCodeList) {
         setState(() {
           this.hexCodeList = hexCodeList;
