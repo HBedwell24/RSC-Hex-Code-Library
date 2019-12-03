@@ -7,3 +7,5 @@ A cross platform mobile application built in Flutter, that possesses the capabil
 
 ## Technologies Used
 * **SQFlite** - database engine used to create, read, update, and delete Hex code records
+
+![Database Schema](images/schema.png?raw=true "Database Schema")
