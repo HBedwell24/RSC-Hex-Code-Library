@@ -3,7 +3,7 @@ A cross platform mobile application built in Flutter, that possesses the capabil
 
 ![Category Management](images/categories.jpg?raw=true "Creating, Editing, and Deleting Categories")
 ![Hex Code Management](images/hex_codes.jpg?raw=true "Creating, Editing, and Deleting Hex Codes")
-![Hex Code Filtering and Sharing](images/sharing.jpg?raw=true "Filtering and Sharing Hex Codes")
+![Hex Code Sharing](images/sharing.jpg?raw=true "Sharing Hex Codes")
 
 ## Technologies Used
 * **SQFlite** - database engine used to create, read, update, and delete Hex code records
