@@ -6,6 +6,6 @@ A cross platform mobile application built in Flutter, that possesses the capabil
 ![Hex Code Sharing](images/sharing.jpg?raw=true "Sharing Hex Codes")
 
 ## Technologies Used
-* **SQFlite** - database engine used to create, read, update, and delete Hex code records
+* **SQFlite** - database engine which is embedded into the application and is used to create, read, update, and delete Category/Hex Code records
 
 ![Database Schema](images/schema.png?raw=true "Database Schema")
