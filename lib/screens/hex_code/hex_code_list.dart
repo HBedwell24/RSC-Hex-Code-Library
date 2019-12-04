@@ -5,7 +5,6 @@ import 'package:rsc_hex_code_library/models/hex_code.dart';
 import 'package:rsc_hex_code_library/utils/database_helper.dart';
 import 'package:rsc_hex_code_library/screens/hex_code/hex_code_detail.dart';
 import 'package:sqflite/sqflite.dart';
-
 import 'hex_code_share.dart';
 
 class HexCodeList extends StatefulWidget {

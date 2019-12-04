@@ -4,7 +4,6 @@ import 'package:rsc_hex_code_library/models/category.dart';
 import 'package:rsc_hex_code_library/screens/hex_code/hex_code_list.dart';
 import 'package:rsc_hex_code_library/utils/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
-
 import 'category_detail.dart';
 
 class CategoryList extends StatefulWidget {
